@@ -58,6 +58,7 @@
     <Compile Include="Primitives\PrimitiveGenericReinterpretTest.cs" />
     <Compile Include="Primitives\Int32ReinterpretCastTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringReinterpretCastTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

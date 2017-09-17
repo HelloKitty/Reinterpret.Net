@@ -38,6 +38,22 @@ namespace Reinterpret.Net
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Reinterprets the provided <see cref="bytes"/> in a similar fashion to C++
+		/// reinterpret_cast by casting the byte chunk to a <see cref="string"/> of the specified
+		/// <see cref="Encoding"/>.
+		/// </summary>
+		/// <param name="bytes">The bytes chunk.</param>
+		/// <returns>The resultant of the cast operation.</returns>
+		public static unsafe string Reinterpret(this byte[] bytes, Encoding encoding)
+		{
+			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
+			if(encoding == null) throw new ArgumentNullException(nameof(encoding));
+			if(bytes.Length == 0) return "";
+
+			throw new NotImplementedException();
+		}
+
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes)
 			where TConvertType : struct
 		{
