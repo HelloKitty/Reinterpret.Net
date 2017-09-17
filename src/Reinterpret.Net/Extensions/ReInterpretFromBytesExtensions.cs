@@ -46,6 +46,11 @@ namespace Reinterpret.Net
 				//TODO: Can we avoid this boxing somehow?
 				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToInt32(bytes);
 			}
+			else if(convertType == typeof(Int64))
+			{
+				//TODO: Can we avoid this boxing somehow?
+				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToInt64(bytes);
+			}
 			else if(convertType == typeof(float))
 			{
 				//TODO: Can we avoid this boxing somehow?

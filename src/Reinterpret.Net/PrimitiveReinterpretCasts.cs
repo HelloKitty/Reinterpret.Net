@@ -56,5 +56,13 @@ namespace Reinterpret.Net
 			fixed (byte* bytePtr = &bytes[0])
 				return *((double*)bytePtr);
 		}
+
+		internal unsafe static Int64 ReinterpretToInt64(byte[] bytes)
+		{
+			//For performance we don't recheck the parameters.
+			//fix address; See this link for information on this memory hack: http://stackoverflow.com/questions/2036718/fastest-way-of-reading-and-writing-binary
+			fixed (byte* bytePtr = &bytes[0])
+				return *((Int64*)bytePtr);
+		}
 	}
 }
