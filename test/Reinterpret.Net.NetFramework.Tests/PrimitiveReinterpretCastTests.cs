@@ -11,19 +11,16 @@ namespace Reinterpret.Net.NetFramework.Tests
 	[TestFixture]
 	public static class PrimitiveReinterpretCastTests
 	{
-		private static IEnumerable<int> int32sToTest = Enumerable.Range(0, 31)
-			.Select(i => int.MaxValue / (int)Math.Pow(2, i) + 1)
-			.Concat(Enumerable.Range(0, 31).Select(i => int.MinValue / (int)Math.Pow(2, i) - 1));
+		private static IEnumerable<int> int32sToTest = GetPowerOfTwoRange(int.MaxValue, 0, sizeof(int) * 8)
+			.Concat(GetPowerOfTwoRange(int.MinValue, 0, sizeof(int) * 8))
+			.Select(l => (int) l);
+
 
 		[Test]
 		[TestCaseSource(nameof(int32sToTest))]
-		[TestCase(int.MaxValue)]
-		[TestCase(int.MinValue)]
-		[TestCase(0)]
-		[TestCase(1)]
-		[TestCase(-1)]
 		public static void TestCanReinterpretToInt32(int valueToTest)
 		{
+
 			//arrange
 			byte[] bytes = BitConverter.GetBytes(valueToTest);
 
@@ -32,6 +29,12 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			//assert
 			Assert.AreEqual(valueToTest, value, $"Result from reinterpret cast was not the same.");
+		}
+
+		private static IEnumerable<Int64> GetPowerOfTwoRange(Int64 mainValue, int start, int stop)
+		{
+			return Enumerable.Range(start, stop)
+				.Select(i => mainValue / (Int64) Math.Pow(2, i));
 		}
 	}
 }
