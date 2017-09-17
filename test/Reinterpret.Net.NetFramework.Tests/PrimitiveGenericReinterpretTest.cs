@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Fasterflect;
 using NUnit.Framework;
 
 namespace Reinterpret.Net.NetFramework.Tests
