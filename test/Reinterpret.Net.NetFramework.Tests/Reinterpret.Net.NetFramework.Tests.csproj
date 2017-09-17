@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ShortReinterpretCastTests.cs" />
     <Compile Include="UInt32ReinterpretCastTests.cs" />
     <Compile Include="PrimitiveGenericReinterpretTest.cs" />
     <Compile Include="Int32ReinterpretCastTests.cs" />
