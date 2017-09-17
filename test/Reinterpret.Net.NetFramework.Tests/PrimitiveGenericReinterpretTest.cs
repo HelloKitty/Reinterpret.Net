@@ -21,9 +21,12 @@ namespace Reinterpret.Net.NetFramework.Tests
 			int sizeOfValue = Marshal.SizeOf<TTypeToTest>();
 
 			ValuesToTest = GetPowerOfTwoRange(GetMaxValue(), 0, sizeOfValue * 8)
-				.Concat(GetPowerOfTwoRange(GetMinValue(), 0, sizeOfValue * 8))
 				.Select(l => ConvertToType<TTypeToTest>(l))
 				.ToArray();
+
+			ValuesToTest = ValuesToTest
+				.Concat(GetPowerOfTwoRange(GetMinValue(), 0, sizeOfValue * 8)
+				.Select(l => ConvertToType<TTypeToTest>(l)));
 		}
 
 		[Test]
@@ -41,7 +44,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 			Assert.AreEqual(valueToTest, value, $"Result from reinterpret cast was not the same.");
 		}
 
-		private static Int64 GetMaxValue()
+		private static UInt64 GetMaxValue()
 		{
 			Type convertType = typeof(TTypeToTest);
 
@@ -50,13 +53,13 @@ namespace Reinterpret.Net.NetFramework.Tests
 			//This can fail if the min/max value on the primitive is not standard/floatingpoint
 			try
 			{
-				return ConvertToType<Int64>(field.GetRawConstantValue());
+				return ConvertToType<UInt64>(field.GetRawConstantValue());
 			}
 			catch(Exception e)
 			{
 				byte[] bytes = BitConverter.GetBytes((dynamic)field.GetRawConstantValue());
 				bytes = Enumerable.Repeat((byte)0, 8 - bytes.Length).Concat(bytes).ToArray();
-				return BitConverter.ToInt64(bytes, 0);
+				return BitConverter.ToUInt64(bytes, 0);
 			}
 		}
 
@@ -93,6 +96,12 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			return Enumerable.Range(start, stop)
 				.Select(i => mainValue / (Int64)Math.Pow(2, i));
+		}
+
+		protected static IEnumerable<UInt64> GetPowerOfTwoRange(UInt64 mainValue, int start, int stop)
+		{
+			return Enumerable.Range(start, stop)
+				.Select(i => mainValue / (UInt64)Math.Pow(2, i));
 		}
 	}
 }

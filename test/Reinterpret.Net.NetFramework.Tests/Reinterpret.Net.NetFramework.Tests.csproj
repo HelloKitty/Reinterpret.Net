@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DoubleReinterpretCastTests.cs" />
     <Compile Include="FloatReinterpretCastTests.cs" />
+    <Compile Include="UInt64ReinterpretCastTests.cs" />
     <Compile Include="Int64ReinterpretCastTests.cs" />
     <Compile Include="UInt16ReinterpretCastTests.cs" />
     <Compile Include="Int16ReinterpretCastTests.cs" />
