@@ -81,6 +81,10 @@ namespace Reinterpret.Net
 				//TODO: Can we avoid this boxing somehow?
 				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToUInt64(bytes);
 			}
+			else if(convertType == typeof(byte))
+			{
+				return (TConvertType)(object)bytes[0];
+			}
 			else
 			{
 				throw new NotImplementedException();
