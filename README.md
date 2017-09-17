@@ -7,6 +7,8 @@ It supports casting from byte array to value-types and some special cases of ref
 ## Features
 - [ ] **Performance** (library is not yet profiled/optimized)
 - [x] **Netstandard1.0**
+- [ ] **Netstandard2.0**
+- [x] .NETFramework >= 2.0
 - [x] Conversion from byte\[\] to primitives (Ex. Int32, Float)
 - [ ] Conversion from primitives to byte\[\]
 - [ ] Conversion from byte\[\] to strings
