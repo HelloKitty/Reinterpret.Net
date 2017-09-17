@@ -85,6 +85,11 @@ namespace Reinterpret.Net
 			{
 				return (TConvertType)(object)bytes[0];
 			}
+			else if(convertType == typeof(sbyte))
+			{
+				//TODO: Can we avoid this boxing somehow?
+				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToSByte(bytes);
+			}
 			else
 			{
 				throw new NotImplementedException();
