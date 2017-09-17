@@ -1,8 +1,32 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{82223BC2-FD46-45B7-8714-A1BBB6FACC0E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net", "src\Reinterpret.Net\Reinterpret.Net.csproj", "{220EF1DB-3B15-403D-A531-8140D1E40D0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{220EF1DB-3B15-403D-A531-8140D1E40D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{220EF1DB-3B15-403D-A531-8140D1E40D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{220EF1DB-3B15-403D-A531-8140D1E40D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{220EF1DB-3B15-403D-A531-8140D1E40D0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{220EF1DB-3B15-403D-A531-8140D1E40D0F} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {886DD3D7-35E3-42F0-8CE9-74FB5AD7BBD0}
+	EndGlobalSection
+EndGlobal
