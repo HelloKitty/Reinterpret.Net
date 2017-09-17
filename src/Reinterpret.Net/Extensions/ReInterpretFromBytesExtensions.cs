@@ -25,7 +25,12 @@ namespace Reinterpret.Net
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
 
+
+#if NETSTANDARD1_0
 			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
+#else
+			Type convertTypeInfo = typeof(TConvertType);
+#endif
 
 			if(convertTypeInfo.IsPrimitive)
 				return ReinterpretPrimitive<TConvertType>(bytes);
