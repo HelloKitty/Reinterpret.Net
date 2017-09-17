@@ -22,7 +22,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			ValuesToTest = GetPowerOfTwoRange(GetMaxValue(), 0, sizeOfValue * 8)
 				.Concat(GetPowerOfTwoRange(GetMinValue(), 0, sizeOfValue * 8))
-				.Select(l => (TTypeToTest)Convert.ChangeType(l, typeof(TTypeToTest)))
+				.Select(l => ConvertToType<TTypeToTest>(l))
 				.ToArray();
 		}
 
@@ -47,7 +47,17 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			FieldInfo field = convertType.GetField("MaxValue", BindingFlags.Static | BindingFlags.Public);
 
-			return ConvertToType<Int64>(field.GetRawConstantValue());
+			//This can fail if the min/max value on the primitive is not standard/floatingpoint
+			try
+			{
+				return ConvertToType<Int64>(field.GetRawConstantValue());
+			}
+			catch(Exception e)
+			{
+				byte[] bytes = BitConverter.GetBytes((dynamic)field.GetRawConstantValue());
+				bytes = Enumerable.Repeat((byte)0, 8 - bytes.Length).Concat(bytes).ToArray();
+				return BitConverter.ToInt64(bytes, 0);
+			}
 		}
 
 		private static Int64 GetMinValue()
@@ -56,7 +66,17 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			FieldInfo field = convertType.GetField("MinValue", BindingFlags.Static | BindingFlags.Public);
 
-			return ConvertToType<Int64>(field.GetRawConstantValue());
+			//This can fail if the min/max value on the primitive is not standard/floatingpoint
+			try
+			{
+				return ConvertToType<Int64>(field.GetRawConstantValue());
+			}
+			catch(Exception e)
+			{
+				byte[] bytes = BitConverter.GetBytes((dynamic)field.GetRawConstantValue());
+				bytes = Enumerable.Repeat((byte) 0, 8 - bytes.Length).Concat(bytes).ToArray();
+				return BitConverter.ToInt64(bytes, 0);
+			}
 		}
 
 		private static TTypeToTest ConvertToType(object value)
