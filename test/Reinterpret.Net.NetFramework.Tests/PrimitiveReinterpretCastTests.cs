@@ -11,19 +11,14 @@ namespace Reinterpret.Net.NetFramework.Tests
 	[TestFixture]
 	public static class PrimitiveReinterpretCastTests
 	{
-		private static IEnumerable<int> int32sToTest = Enumerable.Range(-10, 10)
-			.ToArray();
+		private static IEnumerable<int> int32sToTest = Enumerable.Range(0, 31)
+			.Select(i => int.MaxValue / (int)Math.Pow(2, i) + 1)
+			.Concat(Enumerable.Range(0, 31).Select(i => int.MinValue / (int)Math.Pow(2, i) - 1));
 
 		[Test]
 		[TestCaseSource(nameof(int32sToTest))]
 		[TestCase(int.MaxValue)]
 		[TestCase(int.MinValue)]
-		[TestCase(int.MaxValue / 2 + 1)]
-		[TestCase(int.MinValue / 2 - 1)]
-		[TestCase(int.MaxValue / 4 + 1)]
-		[TestCase(int.MinValue / 4 - 1)]
-		[TestCase(int.MaxValue / 8 + 1)]
-		[TestCase(int.MinValue / 8 - 1)]
 		[TestCase(0)]
 		[TestCase(1)]
 		[TestCase(-1)]
