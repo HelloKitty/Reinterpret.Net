@@ -9,9 +9,9 @@ using NUnit.Framework;
 namespace Reinterpret.Net.NetFramework.Tests
 {
 	[TestFixture]
-	public sealed class UShortReinterpretCastTests : PrimitiveGenericReinterpretTest<ushort>
+	public sealed class Int16ReinterpretCastTests : PrimitiveGenericReinterpretTest<Int16>
 	{
-		public UShortReinterpretCastTests()
+		public Int16ReinterpretCastTests()
 		{
 			
 		}

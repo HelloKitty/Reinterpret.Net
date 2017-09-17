@@ -25,7 +25,7 @@ namespace Reinterpret.Net
 				return *((uint*)bytePtr);
 		}
 
-		internal unsafe static short ReinterpretToShort(byte[] bytes)
+		internal unsafe static short ReinterpretToInt16(byte[] bytes)
 		{
 			//For performance we don't recheck the parameters.
 			//fix address; See this link for information on this memory hack: http://stackoverflow.com/questions/2036718/fastest-way-of-reading-and-writing-binary
@@ -33,7 +33,7 @@ namespace Reinterpret.Net
 				return *((short*)bytePtr);
 		}
 
-		internal unsafe static ushort ReinterpretToUShort(byte[] bytes)
+		internal unsafe static ushort ReinterpretToUInt16(byte[] bytes)
 		{
 			//For performance we don't recheck the parameters.
 			//fix address; See this link for information on this memory hack: http://stackoverflow.com/questions/2036718/fastest-way-of-reading-and-writing-binary
