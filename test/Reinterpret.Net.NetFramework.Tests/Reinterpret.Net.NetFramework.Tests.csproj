@@ -46,17 +46,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SByteReinterpretCastTests.cs" />
-    <Compile Include="ByteReinterpretCastTests.cs" />
-    <Compile Include="DoubleReinterpretCastTests.cs" />
-    <Compile Include="FloatReinterpretCastTests.cs" />
-    <Compile Include="UInt64ReinterpretCastTests.cs" />
-    <Compile Include="Int64ReinterpretCastTests.cs" />
-    <Compile Include="UInt16ReinterpretCastTests.cs" />
-    <Compile Include="Int16ReinterpretCastTests.cs" />
-    <Compile Include="UInt32ReinterpretCastTests.cs" />
-    <Compile Include="PrimitiveGenericReinterpretTest.cs" />
-    <Compile Include="Int32ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\SByteReinterpretCastTests.cs" />
+    <Compile Include="Primitives\ByteReinterpretCastTests.cs" />
+    <Compile Include="Primitives\DoubleReinterpretCastTests.cs" />
+    <Compile Include="Primitives\FloatReinterpretCastTests.cs" />
+    <Compile Include="Primitives\UInt64ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\Int64ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\UInt16ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\Int16ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\UInt32ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\PrimitiveGenericReinterpretTest.cs" />
+    <Compile Include="Primitives\Int32ReinterpretCastTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
