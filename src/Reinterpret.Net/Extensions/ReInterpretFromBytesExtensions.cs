@@ -51,6 +51,11 @@ namespace Reinterpret.Net
 				//TODO: Can we avoid this boxing somehow?
 				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToShort(bytes);
 			}
+			else if(convertType == typeof(ushort))
+			{
+				//TODO: Can we avoid this boxing somehow?
+				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToUShort(bytes);
+			}
 			else if(convertType == typeof(UInt32))
 			{
 				//TODO: Can we avoid this boxing somehow?
