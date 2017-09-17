@@ -20,14 +20,15 @@ namespace Reinterpret.Net
 		/// <param name="bytes">The bytes chunk.</param>
 		/// <returns>The resultant of the cast operation.</returns>
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes)
+			where TConvertType : struct, IComparable, IFormattable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
 
-			//TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
+			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
 
-			//if(convertTypeInfo.IsPrimitive)
-			//	return ReinterpretPrimitive<TConvertType>(bytes);
+			if(convertTypeInfo.IsPrimitive)
+				return ReinterpretPrimitive<TConvertType>(bytes);
 
 			throw new NotImplementedException();
 		}
@@ -37,7 +38,18 @@ namespace Reinterpret.Net
 		{
 			//For performance we don't recheck the parameters.
 
-			throw new NotImplementedException();
+			Type convertType = typeof(TConvertType);
+
+			//.NET does not support Type switch cases
+			if(convertType == typeof(int))
+			{
+				//TODO: Can we avoid this boxing somehow?
+				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToInt32(bytes);
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }
