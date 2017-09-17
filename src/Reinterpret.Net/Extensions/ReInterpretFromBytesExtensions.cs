@@ -20,7 +20,7 @@ namespace Reinterpret.Net
 		/// <param name="bytes">The bytes chunk.</param>
 		/// <returns>The resultant of the cast operation.</returns>
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes)
-			where TConvertType : struct, IComparable, IFormattable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
@@ -34,7 +34,7 @@ namespace Reinterpret.Net
 		}
 
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes)
-			where TConvertType : struct, IComparable, IFormattable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			//For performance we don't recheck the parameters.
 
@@ -83,12 +83,18 @@ namespace Reinterpret.Net
 			}
 			else if(convertType == typeof(byte))
 			{
+				//TODO: Can we avoid this boxing somehow?
 				return (TConvertType)(object)bytes[0];
 			}
 			else if(convertType == typeof(sbyte))
 			{
 				//TODO: Can we avoid this boxing somehow?
 				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToSByte(bytes);
+			}
+			else if(convertType == typeof(bool))
+			{
+				//TODO: Can we avoid this boxing somehow?
+				return (TConvertType)(object)bytes[0];
 			}
 			else
 			{
