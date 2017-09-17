@@ -11,7 +11,7 @@ It supports casting from byte array to value-types and some special cases of ref
 - [x] .NETFramework >= 2.0
 - [x] Conversion from byte\[\] to primitives (Ex. Int32, Float)
 - [ ] Conversion from primitives to byte\[\]
-- [ ] Conversion from byte\[\] to strings
+- [x] Conversion from byte\[\] to strings
 - [ ] Conversion from strings to byte\[\]
 - [ ] Conversion from byte\[\] to primitive arrays
 - [ ] Conversion from primitive arrays to byte\[\]
