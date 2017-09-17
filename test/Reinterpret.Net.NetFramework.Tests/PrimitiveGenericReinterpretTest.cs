@@ -29,7 +29,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 		[Test]
 		[TestCaseSource(nameof(ValuesToTest))]
-		public void TestCanReinterpretToInt32(TTypeToTest valueToTest)
+		public void TestCanReinterpretToTypeType(TTypeToTest valueToTest)
 		{
 			//arrange
 			//We abuse the DLR so that we can keep this generic
