@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PrimitiveGenericReinterpretTest.cs" />
-    <Compile Include="PrimitiveReinterpretCastTests.cs" />
+    <Compile Include="Int32ReinterpretCastTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
