@@ -46,6 +46,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Primitives\BoolReinterpretCastTests.cs" />
     <Compile Include="Primitives\SByteReinterpretCastTests.cs" />
     <Compile Include="Primitives\ByteReinterpretCastTests.cs" />
     <Compile Include="Primitives\DoubleReinterpretCastTests.cs" />

@@ -189,7 +189,7 @@ namespace Reinterpret.Net
 			else if(convertType == typeof(bool))
 			{
 				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)bytes[0];
+				return (TConvertType)(object)(bytes[0] != 0);
 			}
 			else
 			{
