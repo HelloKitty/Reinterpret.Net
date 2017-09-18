@@ -112,6 +112,24 @@ namespace Reinterpret.Net.NetFramework.Tests
 				Assert.AreEqual(realBytes[i], result[i]);
 		}
 
+		//Tests to see that empty arrays are handleable
+		[Test]
+		public void TestCanReinterpretFromEmptyArrayType()
+		{
+			//arrange
+			byte[] realBytes = new byte[0];
+
+			//act
+			byte[] result = realBytes.ReinterpretToArray<TTypeToTest>()
+				.Reinterpret();
+
+			//assert
+			Assert.AreEqual(realBytes.Length, realBytes.Length, $"Calculated invalid Length for Type: {typeof(TTypeToTest).Name}");
+
+			for(int i = 0; i < realBytes.Length; i++)
+				Assert.AreEqual(realBytes[i], result[i]);
+		}
+
 		private static UInt64 GetMaxValue()
 		{
 			Type convertType = typeof(TTypeToTest);

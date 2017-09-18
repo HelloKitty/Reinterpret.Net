@@ -79,7 +79,7 @@ namespace Reinterpret.Net
 			where TConvertType : struct
 		{
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
-			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
+			if(bytes.Length == 0) return new TConvertType[0];
 
 #if NETSTANDARD1_0 || NETSTANDARD1_1
 			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
