@@ -12,11 +12,12 @@ It supports casting from byte array to value-types and some special cases of ref
 - [x] Conversion from byte\[\] to primitives (Ex. Int32, Float)
 - [x] Conversion from primitives to byte\[\]
 - [x] Conversion from byte\[\] to strings
-- [ ] Conversion from strings to byte\[\]
+- [x] Conversion from string to byte\[\]
 - [x] Conversion from byte\[\] to primitive arrays
-- [ ] Conversion from primitive arrays to byte\[\]
+- [x] Conversion from primitive arrays to byte\[\]
 - [x] Conversion from custom struct to byte\[\]
 - [x] Conversion from byte\[\] to custom struct
+- [ ] Conversion fromcustom struct array to byte\[\]
 
 ## How to Use
 
