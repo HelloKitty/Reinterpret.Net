@@ -44,6 +44,22 @@ namespace Reinterpret.Net.NetFramework.Tests
 			Assert.AreEqual(valueToTest, value, $"Result from reinterpret cast was not the same.");
 		}
 
+		[Test]
+		[TestCaseSource(nameof(ValuesToTest))]
+		public void TestCanReinterpretValueToBytes(TTypeToTest valueToTest)
+		{
+			//arrange
+			//We abuse the DLR so that we can keep this generic
+			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+
+			//act
+			byte[] result = valueToTest.Reinterpret();
+
+			//assert
+			for(int i = 0; i < bytes.Length; i++)
+				Assert.AreEqual(bytes[i], result[i], $"Result index: {i} from reinterpret cast was not the same.");
+		}
+
 		//This tests the TTypeToTest[] reinterpetability
 		[Test]
 		public void TestCanReinterpretToArrayType()
