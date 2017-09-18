@@ -26,6 +26,22 @@ byte[] bytes = GetBytes();
 int intValue = bytes.Reinterpret<int>();
 ```
 
+Converting from a byte\[\] to a string (default unicode encoding)
+```csharp
+byte[] bytes = GetBytes();
+string result = bytes.ReinterpretToString();
+```
+```csharp
+byte[] bytes = GetBytes();
+string result = bytes.Reinterpret(Encoding.Unicode);
+```
+
+Converting from a byte\[\] to a primitive array
+```csharp
+byte[] bytes = GetBytes();
+int[] result = bytes.ReinterpretToArray<int>();
+```
+
 ## Setup
 
 To compile or open Reinterpret.Net project you'll first need a couple of things:
