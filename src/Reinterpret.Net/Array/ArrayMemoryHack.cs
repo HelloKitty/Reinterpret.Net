@@ -193,6 +193,18 @@ namespace Reinterpret.Net
 			}
 		}
 
+		public static void ConvertTypeToByteType(this byte[] bytesRef, int arrayCount, int sizeOfTargetType)
+		{
+			if(sizeOfTargetType <= 0) throw new ArgumentOutOfRangeException(nameof(sizeOfTargetType));
+
+			fixed (void* pArray = bytesRef)
+			{
+				var pHeader = GetHeaderPointer(pArray);
+				pHeader->type = TypeToTypePointerDictionary[typeof(byte)];
+				pHeader->length = (UIntPtr)(arrayCount * sizeOfTargetType);
+			}
+		}
+
 		public static void ConvertOtherTypeToByteType(void* arrayPointer, int lengthOfCollection, int sizeOfTargetType)
 		{
 			var pHeader = ArrayMemoryHack.GetHeaderPointer(arrayPointer);

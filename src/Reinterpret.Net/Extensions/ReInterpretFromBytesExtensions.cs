@@ -184,9 +184,13 @@ namespace Reinterpret.Net
 				//TODO: Can we avoid this boxing somehow?
 				return (TConvertType)(object)(bytes[0] != 0);
 			}
+			else if(convertType == typeof(char))
+			{
+				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToChar(bytes);
+			}
 			else
 			{
-				throw new NotImplementedException();
+				throw new NotSupportedException($"Primitive reinterpting is not implemented for {typeof(TConvertType).Name}");
 			}
 		}
 	}

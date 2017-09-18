@@ -9,31 +9,23 @@ namespace Reinterpret.Net
 	internal static unsafe class ArrayHackByteConversionExtensions
 	{
 		public static TConvertedType[] ToConvertedArrayPerm<TConvertedType>(this byte[] bytes)
+			where TConvertedType : struct
 		{
 			var union = new ArrayMemoryHack.Union() { bytes = bytes };
-			union.bytes.ConvertByteTypeToTargetType(ArrayMemoryHack.TypeToTypePointerDictionary[typeof(TConvertedType)], 
-				ArrayMemoryHack.TypeSizeDictionary[typeof(TConvertedType)]);
+			union.bytes.ConvertByteTypeToTargetType(ArrayMemoryHack.TypeToTypePointerDictionary[typeof(TConvertedType)], MarshalSizeOf<TConvertedType>.SizeOf);
 
 			return union.GetTypedArray<TConvertedType>();
 		}
 
-		/*public static char[] ToCharArrayPerm(this byte[] bytes)
+		public static byte[] ToByteArrayPerm<TConvertType>(this TConvertType[] values)
+			where TConvertType : struct
 		{
-			var union = new ArrayMemoryHack.Union() { bytes = bytes };
-			union.bytes.ConvertByteTypeToTargetType(CHAR_ARRAY_TYPE, sizeof(char));
-			return union.chars;
-		}
+			var union = new ArrayMemoryHack.Union();
+			union.SetTypedArray(values);
 
-		private static byte[] ToByteArrayPerm(this char[] charArray)
-		{
-			var union = new ArrayMemoryHack.Union() { chars = charArray };
-
-			fixed (void* cArray = charArray)
-			{
-				ArrayMemoryHack.ConvertOtherTypeToByteType(cArray, charArray.Length, sizeof(char));
-			}
+			union.bytes.ConvertTypeToByteType(values.Length, MarshalSizeOf<TConvertType>.SizeOf);
 
 			return union.bytes;
-		}*/
+		}
 	}
 }

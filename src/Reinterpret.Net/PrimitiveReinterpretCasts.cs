@@ -82,6 +82,14 @@ namespace Reinterpret.Net
 				return *((sbyte*)bytePtr);
 		}
 
+		internal unsafe static char ReinterpretToChar(byte[] bytes)
+		{
+			//For performance we don't recheck the parameters.
+			//fix address; See this link for information on this memory hack: http://stackoverflow.com/questions/2036718/fastest-way-of-reading-and-writing-binary
+			fixed (byte* bytePtr = &bytes[0])
+				return *((char*)bytePtr);
+		}
+
 		#region TOBYTES
 		//TO BYTES
 		internal unsafe static byte[] ReinterpretToBytes(int value)
@@ -170,6 +178,16 @@ namespace Reinterpret.Net
 
 			fixed (byte* bPtr = &bytes[0])
 				*((sbyte*)bPtr) = value;
+
+			return bytes;
+		}
+
+		internal unsafe static byte[] ReinterpretToBytes(char value)
+		{
+			byte[] bytes = new byte[sizeof(char)];
+
+			fixed (byte* bPtr = &bytes[0])
+				*((char*)bPtr) = value;
 
 			return bytes;
 		}

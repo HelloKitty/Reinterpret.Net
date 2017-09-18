@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -63,10 +64,13 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static byte[] Reinterpret<TConvertType>(this TConvertType[] value)
+		public static byte[] Reinterpret<TConvertType>(this TConvertType[] values)
 			where TConvertType : struct
 		{
-			throw new NotImplementedException();
+			if(values == null) throw new ArgumentNullException(nameof(values));
+			if(values.Length == 0) return new byte[0];
+
+			return values.ToArray().ToByteArrayPerm();
 		}
 
 		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value) 
@@ -129,21 +133,29 @@ namespace Reinterpret.Net
 				bool castedValue = (bool) (object) value;
 				return new byte[] {castedValue ? (byte)1 : (byte)0 };
 			}
+			else if(convertType == typeof(char))
+			{
+				return PrimitiveReinterpretCasts.ReinterpretToBytes((char)(object)value);
+			}
 			else
 			{
 				throw new NotImplementedException();
 			}
 		}
 
+		//TODO: Can we access the underlying char array as UTF16 without copying? unions produce ASCII encoded array
 		/// <summary>
 		/// Reinterprets the provided <see cref="value"/>
 		/// </summary>
 		/// <typeparam name="TConvertType"></typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static byte[] Reinterpret(this string value)
+		public static byte[] ReinterpretFromString(this string value)
 		{
-			throw new NotImplementedException();
+			if(value == null) throw new ArgumentNullException(nameof(value));
+			if(String.IsNullOrEmpty(value)) return new byte[0];
+
+			return value.ToCharArray().ToByteArrayPerm();
 		}
 	}
 }
