@@ -50,7 +50,19 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			//arrange
 			//We abuse the DLR so that we can keep this generic
-			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			byte[] bytes = null;
+
+			//For testing purposes we can't use GetBytes on the byte type
+			if(typeof(TTypeToTest) == typeof(byte))
+				bytes = new byte[] { (byte)(object)valueToTest };
+			else if(typeof(TTypeToTest) == typeof(sbyte))
+				unchecked
+				{
+					bytes = new byte[] { (byte)(sbyte)(object)valueToTest };
+				}
+			else
+				bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			
 
 			//act
 			byte[] result = valueToTest.Reinterpret();
