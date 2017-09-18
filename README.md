@@ -16,7 +16,7 @@ It supports casting from byte array to value-types and some special cases of ref
 - [x] Conversion from byte\[\] to primitive arrays
 - [ ] Conversion from primitive arrays to byte\[\]
 - [x] Conversion from custom struct to byte\[\]
-- [ ] Conversion from byte\[\] to custom struct
+- [x] Conversion from byte\[\] to custom struct
 
 ## How to Use
 
