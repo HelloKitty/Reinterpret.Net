@@ -12,6 +12,9 @@ namespace Reinterpret.Net
 	/// </summary
 	public static class ReinterpretToBytesExtensions
 	{
+		//To support lower versions of netframework we don't use concurrent. USE DOUBLE CHECK LOCKING
+		private static Dictionary<Type, int> RuntimeMarshalSizeTypeMap { get; } = new Dictionary<Type, int>();
+
 		/// <summary>
 		/// Reinterprets the provided <see cref="value"/> value to the C# standard
 		/// byte array representation.
@@ -39,7 +42,7 @@ namespace Reinterpret.Net
 		{
 #if !NETSTANDARD1_0
 			//TODO: Cache result of Marshal sizeof. If it even works
-			byte[] bytes = new byte[Marshal.SizeOf(typeof(TConvertType))];
+			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf];
 
 			fixed(byte* bPtr = &bytes[0])
 			{
