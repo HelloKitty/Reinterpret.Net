@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Reinterpret.Net
@@ -29,7 +30,7 @@ namespace Reinterpret.Net
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
 
-#if NETSTANDARD1_0
+#if NETSTANDARD1_0 || NETSTANDARD1_1
 			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
 #else
 			Type convertTypeInfo = typeof(TConvertType);
@@ -37,8 +38,31 @@ namespace Reinterpret.Net
 			if(convertTypeInfo.IsPrimitive)
 				return ReinterpretPrimitive<TConvertType>(bytes);
 
-			throw new NotImplementedException();
+			//We know it's not a primitive so it's a struct, either custom or made by MS/.NET.
+
+#if !NETSTANDARD1_0
+			return ReinterpretCustomStruct<TConvertType>(bytes);
+#else
+			throw new NotSupportedException($"Reinterpreting byte[] to structs is not supported in netstandard1.0 because it lacks the required API.");
+#endif
 		}
+
+		//This feature is unavailable on Netstandard1.0 because Runtime Interop Services are NOT available
+		//Even as a supplemental nuget package it required netstandard1.1
+#if !NETSTANDARD1_0
+		private unsafe static TConvertType ReinterpretCustomStruct<TConvertType>(byte[] bytes) 
+			where TConvertType : struct
+		{
+			fixed(byte* p = bytes)
+			{
+#if NET20 || NET30 || NET35 || NET40 || NETSTANDARD1_1
+				return (TConvertType)Marshal.PtrToStructure((IntPtr)p, typeof(TConvertType));
+#else
+				return Marshal.PtrToStructure<TConvertType>((IntPtr)p);
+#endif
+			}
+		}
+#endif
 
 		/// <summary>
 		/// Reinterprets the provided <see cref="bytes"/> in a similar fashion to C++
@@ -57,7 +81,7 @@ namespace Reinterpret.Net
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
 
-#if NETSTANDARD1_0
+#if NETSTANDARD1_0 || NETSTANDARD1_1
 			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
 #else
 			Type convertTypeInfo = typeof(TConvertType);
