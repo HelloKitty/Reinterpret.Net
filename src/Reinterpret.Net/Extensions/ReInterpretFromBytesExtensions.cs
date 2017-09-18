@@ -69,10 +69,14 @@ namespace Reinterpret.Net
 			throw new NotImplementedException();
 		}
 
-		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes)
+		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes, bool allowDestroyByteArray = false)
 			where TConvertType : struct
 		{
-			return bytes.ToConvertedArrayPerm<TConvertType>();
+			//If someone happens to ask for the byte representation of bytes
+			if(typeof(TConvertType) == typeof(byte))
+				return bytes as TConvertType[];
+
+			return allowDestroyByteArray ? bytes.ToConvertedArrayPerm<TConvertType>() : bytes.ToArray().ToConvertedArrayPerm<TConvertType>();
 		}
 
 		/// <summary>
