@@ -10,8 +10,6 @@ namespace Reinterpret.Net
 		//TODO: We can't use IReadonlyDictionary because most versions doesn't support it. Can we crate our own interface?
 		public static IDictionary<Type, UIntPtr> TypeToTypePointerDictionary { get; }
 
-		public static IDictionary<Type, int> TypeSizeDictionary { get; }
-
 		[StructLayout(LayoutKind.Explicit)]
 		internal struct Union
 		{
@@ -28,6 +26,38 @@ namespace Reinterpret.Net
 			[FieldOffset(0)] public ulong[] ulongs;
 			[FieldOffset(0)] public float[] floats;
 			[FieldOffset(0)] public double[] doubles;
+
+			internal void SetTypedArray<TConvertType>(TConvertType[] values)
+			{
+				Type t = typeof(TConvertType);
+
+				if(t == typeof(byte))
+					bytes = values as byte[];
+				else if(t == typeof(int))
+					ints = values as int[];
+				else if(t == typeof(float))
+					floats = values as float[];
+				else if(t == typeof(double))
+					doubles = values as double[];
+				else if(t == typeof(char))
+					chars = values as char[];
+				else if(t == typeof(bool))
+					bools = values as bool[];
+				else if(t == typeof(short))
+					shorts = values as short[];
+				else if(t == typeof(uint))
+					uints = values as uint[];
+				else if(t == typeof(long))
+					longs = values as long[];
+				else if(t == typeof(ulong))
+					ulongs = values as ulong[];
+				else if(t == typeof(sbyte))
+					sbytes = values as sbyte[];
+				else if(t == typeof(ushort))
+					ushorts = values as ushort[];
+				else
+					throw new NotImplementedException();
+			}
 
 			/// <summary>
 			/// Gets the strongly typed reference to the array in the union whose Type matches
@@ -82,82 +112,67 @@ namespace Reinterpret.Net
 			Dictionary<Type, UIntPtr> typePointerDictionary = new Dictionary<Type, UIntPtr>();
 			TypeToTypePointerDictionary = typePointerDictionary;
 
-			Dictionary<Type, int> typeSizeDictionary = new Dictionary<Type, int>();
-			TypeSizeDictionary = typeSizeDictionary;
-
 			//Below we prepare all the types we can handle.
 			//We want to get their type UIntPtr and store in the publicly accessible map
 			//for other array hacking classes to use.
 			fixed (void* p = new byte[1])
 			{
 				typePointerDictionary[typeof(byte)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(byte)] = sizeof(byte);
 			}
 
 			fixed (void* p = new sbyte[1])
 			{
 				typePointerDictionary[typeof(sbyte)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(sbyte)] = sizeof(sbyte);
 			}
 
 			fixed (void* p = new char[1])
 			{
 				typePointerDictionary[typeof(char)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(char)] = sizeof(char);
 			}
 
 			fixed (void* p = new bool[1])
 			{
 				typePointerDictionary[typeof(bool)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(bool)] = sizeof(bool);
 			}
 
 			fixed (void* p = new int[1])
 			{
 				typePointerDictionary[typeof(int)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(int)] = sizeof(int);
 			}
 
 			fixed (void* p = new uint[1])
 			{
 				typePointerDictionary[typeof(uint)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(uint)] = sizeof(uint);
 			}
 
 			fixed (void* p = new short[1])
 			{
 				typePointerDictionary[typeof(short)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(short)] = sizeof(short);
 			}
 
 			fixed (void* p = new ushort[1])
 			{
 				typePointerDictionary[typeof(ushort)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(ushort)] = sizeof(ushort);
 			}
 
 			fixed (void* p = new float[1])
 			{
 				typePointerDictionary[typeof(float)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(float)] = sizeof(float);
 			}
 
 			fixed (void* p = new double[1])
 			{
 				typePointerDictionary[typeof(double)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(double)] = sizeof(double);
 			}
 
 			fixed (void* p = new long[1])
 			{
 				typePointerDictionary[typeof(long)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(long)] = sizeof(long);
 			}
 
 			fixed (void* p = new ulong[1])
 			{
 				typePointerDictionary[typeof(ulong)] = GetHeaderPointer(p)->type;
-				typeSizeDictionary[typeof(ulong)] = sizeof(ulong);
 			}
 		}
 
