@@ -19,24 +19,60 @@ namespace Reinterpret.Net
 		/// </summary>
 		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
 		/// <param name="bytes">The bytes chunk.</param>
+		/// <param name="allowDestroyByteArray ">Indicates if the provided <see cref="bytes"/> array can be modified or 
+		/// changed/destroyed in the process of casting. Indicating true  can yield higher performance results but the
+		/// byte array must never be touched or used again. This will only work for certain types of reinterpret casting.</param>
 		/// <returns>The resultant of the cast operation.</returns>
-		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes)
+		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
 			where TConvertType : struct
 		{
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
-
 
 #if NETSTANDARD1_0
 			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
 #else
 			Type convertTypeInfo = typeof(TConvertType);
 #endif
-
 			if(convertTypeInfo.IsPrimitive)
 				return ReinterpretPrimitive<TConvertType>(bytes);
 
 			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Reinterprets the provided <see cref="bytes"/> in a similar fashion to C++
+		/// reinterpret_cast by casting the byte chunk into the specified generic type
+		/// <typeparamref name="TConvetType"/>.
+		/// </summary>
+		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
+		/// <param name="bytes">The bytes chunk.</param>
+		/// <param name="allowDestroyByteArray ">Indicates if the provided <see cref="bytes"/> array can be modified or 
+		/// changed/destroyed in the process of casting. Indicating true  can yield higher performance results but the
+		/// byte array must never be touched or used again. This will only work for certain types of reinterpret casting.</param>
+		/// <returns>The resultant of the cast operation.</returns>
+		public static unsafe TConvertType[] ReinterpretToArray<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
+			where TConvertType : struct
+		{
+			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
+			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
+
+#if NETSTANDARD1_0
+			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
+#else
+			Type convertTypeInfo = typeof(TConvertType);
+#endif
+			//We can only handle primitive arrays
+			if(convertTypeInfo.IsPrimitive)
+				return ReinterpretPrimitiveArray<TConvertType>(bytes);
+
+			throw new NotImplementedException();
+		}
+
+		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes)
+			where TConvertType : struct
+		{
+			return bytes.ToConvertedArrayPerm<TConvertType>();
 		}
 
 		/// <summary>
@@ -71,9 +107,8 @@ namespace Reinterpret.Net
 		}
 
 		/// <summary>
-		/// Reinterprets the provided <see cref="bytes"/> in a similar fashion to C++
-		/// reinterpret_cast by casting the byte chunk to a <see cref="string"/> using Unicode
-		/// encoding (2byte char).
+		/// High performance reinterpret cast for the <see cref="bytes"/> converting
+		/// the byte chunk to a <see cref="string"/> using Unicode encoding (2byte char).
 		/// </summary>
 		/// <param name="bytes">The bytes chunk.</param>
 		/// <param name="allowDestroyByteArray ">Indicates if the provided <see cref="bytes"/> array can be modified or 
@@ -86,12 +121,11 @@ namespace Reinterpret.Net
 			if(bytes.Length == 0) return "";
 
 			//The caller may want to reuse the byte array so we check if they will allow us to destroy it
-			char[] chars = allowDestroyByteArray ? bytes.ToCharArrayPerm() : bytes.ToArray().ToCharArrayPerm();
+			char[] chars = allowDestroyByteArray ? bytes.ToConvertedArrayPerm<char>() : bytes.ToArray().ToConvertedArrayPerm<char>();
 			return new string(chars);
 		}
 
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes)
-			where TConvertType : struct
 		{
 			//For performance we don't recheck the parameters.
 

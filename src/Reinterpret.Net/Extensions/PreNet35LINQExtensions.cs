@@ -725,7 +725,7 @@ namespace System.Collections.Generic
 
 namespace System.Linq
 {
-	public static partial class Enumerable
+	internal static partial class Enumerable
 	{
 		public static TSource[] ToArray<TSource>(this IEnumerable<TSource> source)
 		{

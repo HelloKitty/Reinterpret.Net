@@ -44,6 +44,26 @@ namespace Reinterpret.Net.NetFramework.Tests
 			Assert.AreEqual(valueToTest, value, $"Result from reinterpret cast was not the same.");
 		}
 
+		//This tests the TTypeToTest[] reinterpetability
+		[Test]
+		public void TestCanReinterpretToArrayType()
+		{
+			//arrange
+			byte[] realBytes = ValuesToTest
+				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[]{(byte)(dynamic)v} : (byte[])BitConverter.GetBytes((dynamic)v))
+				.ToArray();
+
+			//act
+			TTypeToTest[] result = realBytes.ReinterpretToArray<TTypeToTest>();
+
+			//assert
+			TTypeToTest[] expectedResult = ValuesToTest.ToArray();
+			Assert.AreEqual(expectedResult.Length, result.Length, $"Calculated invalid Length for Type: {typeof(TTypeToTest).Name}");
+
+			for(int i = 0; i < expectedResult.Length; i++)
+				Assert.AreEqual(expectedResult[i], result[i]);
+		}
+
 		private static UInt64 GetMaxValue()
 		{
 			Type convertType = typeof(TTypeToTest);
