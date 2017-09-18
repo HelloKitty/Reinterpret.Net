@@ -30,6 +30,39 @@ namespace Reinterpret.Net
 			if(convertTypeInfo.IsPrimitive)
 				return ReinterpretFromPrimitive(value);
 
+			//At this point it's likely to be a custom struct which must be marshalled
+			return ReinterpretFromCustomStruct(value);
+		}
+
+		private unsafe static byte[] ReinterpretFromCustomStruct<TConvertType>(TConvertType value) 
+			where TConvertType : struct
+		{
+#if !NETSTANDARD1_0
+			//TODO: Cache result of Marshal sizeof. If it even works
+			byte[] bytes = new byte[Marshal.SizeOf(typeof(TConvertType))];
+
+			fixed(byte* bPtr = &bytes[0])
+			{
+				//TODO: Should we delete for any reasons? Should we expose the ability?
+				Marshal.StructureToPtr(value, (IntPtr)bPtr, false);
+			}
+
+			return bytes;
+#else
+				throw new NotSupportedException($"Reinterpreting structs to byte[] is not supported in netstandard1.0 because it lacks the required API.");
+#endif
+		}
+
+		/// <summary>
+		/// Reinterprets the provided <see cref="value"/> array to the byte representation
+		/// of the array.
+		/// </summary>
+		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static byte[] Reinterpret<TConvertType>(this TConvertType[] value)
+			where TConvertType : struct
+		{
 			throw new NotImplementedException();
 		}
 
