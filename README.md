@@ -10,7 +10,7 @@ It supports casting from byte array to value-types and some special cases of ref
 - [ ] **Netstandard2.0**
 - [x] .NETFramework >= 2.0
 - [x] Conversion from byte\[\] to primitives (Ex. Int32, Float)
-- [ ] Conversion from primitives to byte\[\]
+- [x] Conversion from primitives to byte\[\]
 - [x] Conversion from byte\[\] to strings
 - [ ] Conversion from strings to byte\[\]
 - [x] Conversion from byte\[\] to primitive arrays
