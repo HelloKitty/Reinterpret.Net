@@ -45,17 +45,25 @@ namespace Reinterpret.Net
 			//TODO: Cache result of Marshal sizeof. If it even works
 			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf];
 
-			fixed(byte* bPtr = &bytes[0])
+			MarshalValueToByteArray(value, bytes, 0);
+
+			return bytes;
+#else
+			throw new NotSupportedException($"Reinterpreting structs to byte[] is not supported in netstandard1.0 because it lacks the required API.");
+#endif
+		}
+
+#if !NETSTANDARD1_0
+		private static unsafe void MarshalValueToByteArray<TConvertType>(TConvertType value, byte[] bytes, int offset) 
+			where TConvertType : struct
+		{
+			fixed (byte* bPtr = &bytes[offset])
 			{
 				//TODO: Should we delete for any reasons? Should we expose the ability?
 				Marshal.StructureToPtr(value, (IntPtr)bPtr, false);
 			}
-
-			return bytes;
-#else
-				throw new NotSupportedException($"Reinterpreting structs to byte[] is not supported in netstandard1.0 because it lacks the required API.");
-#endif
 		}
+#endif
 
 		/// <summary>
 		/// Reinterprets the provided <see cref="value"/> array to the byte representation
@@ -64,14 +72,41 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static byte[] Reinterpret<TConvertType>(this TConvertType[] values)
+		public unsafe static byte[] Reinterpret<TConvertType>(this TConvertType[] values)
 			where TConvertType : struct
 		{
 			if(values == null) throw new ArgumentNullException(nameof(values));
 			if(values.Length == 0) return new byte[0];
 
-			return values.ToArray().ToByteArrayPerm();
+#if NETSTANDARD1_0 || NETSTANDARD1_1
+			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
+#else
+			Type convertTypeInfo = typeof(TConvertType);
+#endif
+			if(convertTypeInfo.IsPrimitive)
+				return values.ToArray().ToByteArrayPerm();
+
+#if !NETSTANDARD1_0
+			return ReinterpretFromCustomStructArray(values);
+#else
+			throw new NotSupportedException($"Reinterpreting structs to byte[] is not supported in netstandard1.0 because it lacks the required API.");
+#endif
 		}
+
+#if !NETSTANDARD1_0
+		private static unsafe byte[] ReinterpretFromCustomStructArray<TConvertType>(TConvertType[] values) 
+			where TConvertType : struct
+		{
+			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf * values.Length];
+
+			for(int i = 0; i < values.Length; i++)
+			{
+				MarshalValueToByteArray(values[i], bytes, i * MarshalSizeOf<TConvertType>.SizeOf);
+			}
+
+			return bytes;
+		}
+#endif
 
 		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value) 
 			where TConvertType : struct

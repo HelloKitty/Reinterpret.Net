@@ -35,13 +35,13 @@ namespace Reinterpret.Net.NetFramework.Tests
 		}
 
 		[Test]
-		[TestCase('h', new int[]{5})]
-		[TestCase('j', new int[] { int.MinValue, 5, 6, 7})]
-		[TestCase((char)0, new int[] { int.MinValue, 99, 5533})]
+		[TestCase('h', new int[] {5})]
+		[TestCase('j', new int[] {int.MinValue, 5, 6, 7})]
+		[TestCase((char)0, new int[] {int.MinValue, 99, 5533})]
 		public unsafe static void Test_Can_Reinterpret_CustomStruct_Containing_Array(char charValue, int[] intValues)
 		{
 			//arrange
-			TestCustomStruct2 testStructValue = new TestCustomStruct2() { c = charValue, i = intValues };
+			TestCustomStruct2 testStructValue = new TestCustomStruct2() {c = charValue, i = intValues};
 
 			byte[] buffer = new byte[Marshal.SizeOf<TestCustomStruct2>()];
 			IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf<TestCustomStruct2>());
@@ -66,7 +66,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		public unsafe static void Test_Can_Reinterpret_CustomStruct_Containing_String(char charValue, string stringValue)
 		{
 			//arrange
-			TestCustomStruct3 testStructValue = new TestCustomStruct3() { c = charValue, s = stringValue };
+			TestCustomStruct3 testStructValue = new TestCustomStruct3() {c = charValue, s = stringValue};
 
 			byte[] buffer = new byte[Marshal.SizeOf<TestCustomStruct2>()];
 			IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf<TestCustomStruct2>());
@@ -90,7 +90,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		public unsafe static void Test_Can_Reinterpret_CustomStruct_Containing_RefType(char charValue, string stringValue)
 		{
 			//arrange
-			TestCustomStruct4 testStructValue = new TestCustomStruct4() { c = charValue, refType = new TestRefType() { s = stringValue}};
+			TestCustomStruct4 testStructValue = new TestCustomStruct4() {c = charValue, refType = new TestRefType() {s = stringValue}};
 
 			byte[] buffer = new byte[Marshal.SizeOf<TestCustomStruct2>()];
 			IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf<TestCustomStruct2>());
@@ -127,13 +127,13 @@ namespace Reinterpret.Net.NetFramework.Tests
 		}
 
 		[Test]
-		[TestCase('h', new int[] { 5 })]
-		[TestCase('j', new int[] { int.MinValue, 5, 6, 7 })]
-		[TestCase((char)0, new int[] { int.MinValue, 99, 5533 })]
+		[TestCase('h', new int[] {5})]
+		[TestCase('j', new int[] {int.MinValue, 5, 6, 7})]
+		[TestCase((char)0, new int[] {int.MinValue, 99, 5533})]
 		public unsafe static void Test_Can_Reinterpret_From_Containing_Array(char charValue, int[] intValues)
 		{
 			//arrange
-			TestCustomStruct2 testStructValue = new TestCustomStruct2() { c = charValue, i = intValues };
+			TestCustomStruct2 testStructValue = new TestCustomStruct2() {c = charValue, i = intValues};
 
 			//act
 			byte[] result = testStructValue.Reinterpret();
@@ -152,7 +152,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		public unsafe static void Test_Can_Reinterpret_From_Containing_String(char charValue, string stringValue)
 		{
 			//arrange
-			TestCustomStruct3 testStructValue = new TestCustomStruct3() { c = charValue, s = stringValue };
+			TestCustomStruct3 testStructValue = new TestCustomStruct3() {c = charValue, s = stringValue};
 
 			//act
 			byte[] result = testStructValue.Reinterpret();
@@ -171,7 +171,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		public unsafe static void Test_Can_Reinterpret_From_Containing_RefType(char charValue, string stringValue)
 		{
 			//arrange
-			TestCustomStruct4 testStructValue = new TestCustomStruct4() { c = charValue, refType = new TestRefType() { s = stringValue } };
+			TestCustomStruct4 testStructValue = new TestCustomStruct4() {c = charValue, refType = new TestRefType() {s = stringValue}};
 
 			//act
 			byte[] result = testStructValue.Reinterpret();
@@ -183,6 +183,33 @@ namespace Reinterpret.Net.NetFramework.Tests
 			Assert.AreEqual(testStructValue.c, resultBackToStruct.c);
 		}
 
+		[Test]
+		[TestCase('h', 5)]
+		[TestCase('j', int.MinValue)]
+		[TestCase((char)0, int.MaxValue)]
+		public static void Test_Can_Reinterpret_ArrayOf_ValueOnlyStruct(char charValue, int intValue)
+		{
+			//arrange
+			TestCustomStruct1[] testStructValue = new TestCustomStruct1[] { new TestCustomStruct1() { c = charValue, i = intValue }, new TestCustomStruct1() { c = 't', i = 5 } };
+
+			byte[] realBytes = testStructValue
+				.SelectMany(c => c.Reinterpret())
+				.ToArray();
+
+			//act
+			byte[] result = testStructValue.Reinterpret();
+
+			//assert
+			Assert.NotNull(result);
+			Assert.AreEqual(realBytes.Length, result.Length);
+
+			for(int i = 0; i < realBytes.Length; i++)
+			{
+				Assert.AreEqual(realBytes[i], result[i]);
+			}
+		}
+
+		
 		public class TestRefType
 		{
 			public string s;
