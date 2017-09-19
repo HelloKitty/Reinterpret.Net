@@ -26,12 +26,7 @@ namespace Reinterpret.Net
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value)
 			where TConvertType : struct
 		{
-#if NETSTANDARD1_0 || NETSTANDARD1_1
-			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
-#else
-			Type convertTypeInfo = typeof(TConvertType);
-#endif
-			if(convertTypeInfo.IsPrimitive)
+			if(TypeIntrospector<TConvertType>.IsPrimitive)
 				return ReinterpretFromPrimitive(value);
 
 			//At this point it's likely to be a custom struct which must be marshalled
