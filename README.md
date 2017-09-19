@@ -6,18 +6,19 @@ It supports casting from byte array to value-types and some special cases of ref
 
 ## Features
 - [ ] **Performance** (library is not yet profiled/optimized)
-- [x] **Netstandard1.0**
+- [x] **Netstandard1.1**
 - [ ] **Netstandard2.0**
 - [x] .NETFramework >= 2.0
 - [x] Conversion from byte\[\] to primitives (Ex. Int32, Float)
 - [x] Conversion from primitives to byte\[\]
-- [x] Conversion from byte\[\] to strings
+- [x] Conversion from byte\[\] to string
 - [x] Conversion from string to byte\[\]
+- [x] Conversion from byte\[\] to custom struct
+- [x] Conversion from custom struct to byte\[\]
 - [x] Conversion from byte\[\] to primitive arrays
 - [x] Conversion from primitive arrays to byte\[\]
-- [x] Conversion from custom struct to byte\[\]
-- [x] Conversion from byte\[\] to custom struct
-- [ ] Conversion fromcustom struct array to byte\[\]
+- [x] Conversion from byte\[\] to custom struct array
+- [x] Conversion from custom struct array to byte\[\]
 
 ## How to Use
 
