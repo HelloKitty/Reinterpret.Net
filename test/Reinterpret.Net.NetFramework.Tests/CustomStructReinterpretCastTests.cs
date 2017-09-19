@@ -209,7 +209,32 @@ namespace Reinterpret.Net.NetFramework.Tests
 			}
 		}
 
-		
+		[Test]
+		[TestCase('h', 5)]
+		[TestCase('j', int.MinValue)]
+		[TestCase((char)0, int.MaxValue)]
+		public static void Test_Can_Reinterpret_To_ArrayOf_ValueOnlyStruct(char charValue, int intValue)
+		{
+			//arrange
+			TestCustomStruct1[] testStructValue = new TestCustomStruct1[] { new TestCustomStruct1() { c = charValue, i = intValue }, new TestCustomStruct1() { c = 't', i = 5 } };
+
+			//act
+			TestCustomStruct1[] result = testStructValue
+				.SelectMany(c => c.Reinterpret())
+				.ToArray()
+				.ReinterpretToArray<TestCustomStruct1>();
+
+			//assert
+			Assert.NotNull(result);
+			Assert.AreEqual(testStructValue.Length, result.Length);
+
+			for(int i = 0; i < testStructValue.Length; i++)
+			{
+				Assert.AreEqual(testStructValue[i].i, result[i].i);
+				Assert.AreEqual(testStructValue[i].c, result[i].c);
+			}
+		}
+
 		public class TestRefType
 		{
 			public string s;
