@@ -18,7 +18,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 		static PrimitiveGenericReinterpretTest()
 		{
-			int sizeOfValue = Marshal.SizeOf<TTypeToTest>();
+			int sizeOfValue = Marshal.SizeOf(typeof(TTypeToTest));
 
 			ValuesToTest = GetPowerOfTwoRange(GetMaxValue(), 0, sizeOfValue * 8)
 				.Select(l => ConvertToType<TTypeToTest>(l))

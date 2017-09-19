@@ -23,42 +23,24 @@ namespace Reinterpret.Net
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value)
 			where TConvertType : struct
 		{
-			throw new NotImplementedException();
 			if(TypeIntrospector<TConvertType>.IsPrimitive)
-				return ReinterpretFromPrimitive(value);
+				return PrimitiveReinterpretCasts.ReinterpretToBytes(value);
 
 			//At this point it's likely to be a custom struct which must be marshalled
 			return ReinterpretFromCustomStruct(value);
 		}
 
-		/// <summary>
-		/// Reinterprets the provided <see cref="value"/> value to the C# standard
-		/// byte array representation.
-		/// </summary>
-		/// <typeparam name="TConvertType">The type of the value.</typeparam>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static byte[] Reinterpret(this int value)
-		{
-			return PrimitiveReinterpretCasts.ReinterpretToBytes(value);
-		}
-
 		private unsafe static byte[] ReinterpretFromCustomStruct<TConvertType>(TConvertType value) 
 			where TConvertType : struct
 		{
-#if !NETSTANDARD1_0
 			//TODO: Cache result of Marshal sizeof. If it even works
 			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf];
 
 			MarshalValueToByteArray(value, bytes, 0);
 
 			return bytes;
-#else
-			throw new NotSupportedException($"Reinterpreting structs to byte[] is not supported in netstandard1.0 because it lacks the required API.");
-#endif
 		}
 
-#if !NETSTANDARD1_0
 		private static unsafe void MarshalValueToByteArray<TConvertType>(TConvertType value, byte[] bytes, int offset) 
 			where TConvertType : struct
 		{
@@ -68,7 +50,6 @@ namespace Reinterpret.Net
 				Marshal.StructureToPtr(value, (IntPtr)bPtr, false);
 			}
 		}
-#endif
 
 		/// <summary>
 		/// Reinterprets the provided <see cref="value"/> array to the byte representation
@@ -86,14 +67,9 @@ namespace Reinterpret.Net
 			if(TypeIntrospector<TConvertType>.IsPrimitive)
 				return values.ToArray().ToByteArrayPerm();
 
-#if !NETSTANDARD1_0
 			return ReinterpretFromCustomStructArray(values);
-#else
-			throw new NotSupportedException($"Reinterpreting structs to byte[] is not supported in netstandard1.0 because it lacks the required API.");
-#endif
 		}
 
-#if !NETSTANDARD1_0
 		private static unsafe byte[] ReinterpretFromCustomStructArray<TConvertType>(TConvertType[] values) 
 			where TConvertType : struct
 		{
@@ -106,14 +82,10 @@ namespace Reinterpret.Net
 
 			return bytes;
 		}
-#endif
 
 		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value) 
 			where TConvertType : struct
 		{
-#if NET46 || NETSTANDARD1_1
-			return ReinterpretFromPrimitive(value);
-#else
 			Type convertType = typeof(TConvertType);
 
 			//.NET does not support Type switch cases
@@ -179,7 +151,6 @@ namespace Reinterpret.Net
 			{
 				throw new NotImplementedException();
 			}
-#endif
 		}
 
 		//TODO: Can we access the underlying char array as UTF16 without copying? unions produce ASCII encoded array

@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{96528F39-BC13-40E4-8B41-EFACCE26588D}</ProjectGuid>
+    <ProjectGuid>{9EE339C7-677D-4E26-B0C7-4E8A9351BBA0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Reinterpret.Net.NetFramework.Tests</RootNamespace>
-    <AssemblyName>Reinterpret.Net.NetFramework.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <RootNamespace>Reinterpret.Net.Netframework40.Tests</RootNamespace>
+    <AssemblyName>Reinterpret.Net.Netframework40.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -28,7 +28,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,7 +36,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -48,34 +46,32 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomStructReinterpretCastTests.cs" />
     <Compile Include="Primitives\BoolReinterpretCastTests.cs" />
-    <Compile Include="Primitives\CharReinterpretCastTests.cs" />
-    <Compile Include="Primitives\SByteReinterpretCastTests.cs" />
     <Compile Include="Primitives\ByteReinterpretCastTests.cs" />
+    <Compile Include="Primitives\CharReinterpretCastTests.cs" />
     <Compile Include="Primitives\DoubleReinterpretCastTests.cs" />
     <Compile Include="Primitives\FloatReinterpretCastTests.cs" />
-    <Compile Include="Primitives\UInt64ReinterpretCastTests.cs" />
-    <Compile Include="Primitives\Int64ReinterpretCastTests.cs" />
-    <Compile Include="Primitives\UInt16ReinterpretCastTests.cs" />
     <Compile Include="Primitives\Int16ReinterpretCastTests.cs" />
-    <Compile Include="Primitives\UInt32ReinterpretCastTests.cs" />
     <Compile Include="Primitives\Int32ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\Int64ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\SByteReinterpretCastTests.cs" />
+    <Compile Include="Primitives\UInt16ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\UInt32ReinterpretCastTests.cs" />
+    <Compile Include="Primitives\UInt64ReinterpretCastTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringReinterpretCastTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\..\test\Reinterpret.Net.Common.Tests\Reinterpret.Net.Common.Tests.csproj">
+      <Project>{01824f98-69fb-4e14-8eb6-12e0c9c934e5}</Project>
+      <Name>Reinterpret.Net.Common.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Reinterpret.Net\Reinterpret.Net.csproj">
       <Project>{220ef1db-3b15-403d-a531-8140d1e40d0f}</Project>
       <Name>Reinterpret.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Reinterpret.Net.Common.Tests\Reinterpret.Net.Common.Tests.csproj">
-      <Project>{01824f98-69fb-4e14-8eb6-12e0c9c934e5}</Project>
-      <Name>Reinterpret.Net.Common.Tests</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
