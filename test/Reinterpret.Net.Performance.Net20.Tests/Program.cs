@@ -14,6 +14,7 @@ namespace Reinterpret.Net.Performance.Tests
 
 		static void Main(string[] args)
 		{
+			Console.ReadKey();
 			byte[] bytes = null;
 			Stopwatch watch = new Stopwatch();
 			BitConverterInt32ToBytesTest(bytes, watch);
@@ -21,6 +22,11 @@ namespace Reinterpret.Net.Performance.Tests
 
 			ReinterpretInt32ToBytesTest(watch);
 			watch.Reset();
+
+			BitConverterToInt32FromBytesTest(bytes, watch);
+			watch.Reset();
+
+			ReinterpretInt32FromBytesTest(watch);
 
 			Console.ReadKey();
 		}
@@ -32,11 +38,27 @@ namespace Reinterpret.Net.Performance.Tests
 			PauseGC();
 			watch.Start();
 			for(int i = 0; i < TenMillion; i++)
-				5.Reinterpret();
+				5.Reinterpret()[0] = 6;
 			watch.Stop();
 			ResumeGC();
 
 			Console.WriteLine($"Reinterpret Int32 to Bytes: {watch.Elapsed}");
+		}
+
+		private static void ReinterpretInt32FromBytesTest(Stopwatch watch)
+		{
+			//prewarm
+			byte[] bytes = 5.Reinterpret();
+			int val = bytes.Reinterpret<int>();
+			PauseGC();
+			watch.Start();
+			for(int i = 0; i < TenMillion; i++)
+				val = bytes.Reinterpret<int>();
+
+			watch.Stop();
+			ResumeGC();
+
+			Console.WriteLine($"Reinterpret Bytes to Int32: {watch.Elapsed}");
 		}
 
 		private static void BitConverterInt32ToBytesTest(byte[] bytes, Stopwatch watch)
@@ -48,11 +70,28 @@ namespace Reinterpret.Net.Performance.Tests
 			for(int i = 0; i < TenMillion; i++)
 			{
 				bytes = BitConverter.GetBytes(5);
+				bytes[0] = 6;
 			}
 			watch.Stop();
 			ResumeGC();
 
 			Console.WriteLine($"BitConverter Int32 to Bytes: {watch.Elapsed}");
+		}
+
+		private static void BitConverterToInt32FromBytesTest(byte[] bytes, Stopwatch watch)
+		{
+			//prewarm
+			bytes = BitConverter.GetBytes(5);
+			PauseGC();
+			watch.Start();
+			for(int i = 0; i < TenMillion; i++)
+			{
+				int val = BitConverter.ToInt32(bytes, 0);
+			}
+			watch.Stop();
+			ResumeGC();
+
+			Console.WriteLine($"BitConverter Bytes to Int32: {watch.Elapsed}");
 		}
 
 		public static void PauseGC()

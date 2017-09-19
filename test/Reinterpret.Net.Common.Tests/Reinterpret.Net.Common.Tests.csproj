@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PlaceHolderTestFixture.cs" />
     <Compile Include="PrimitiveGenericReinterpretTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
