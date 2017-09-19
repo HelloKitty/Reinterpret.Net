@@ -32,6 +32,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			Assert.AreEqual(testStructValue.i, resultStructValue.i);
 			Assert.AreEqual(testStructValue.c, resultStructValue.c);
+			Marshal.FreeHGlobal(ptr);
 		}
 
 		[Test]
@@ -57,6 +58,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 			for(int i = 0; i < intValues.Length; i++)
 				Assert.AreEqual(intValues[i], resultStructValue.i[i]);
 			Assert.AreEqual(testStructValue.c, resultStructValue.c);
+			Marshal.FreeHGlobal(ptr);
 		}
 
 		[Test]
@@ -81,6 +83,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 			Assert.NotNull(resultStructValue.s);
 			Assert.AreEqual(stringValue, resultStructValue.s);
 			Assert.AreEqual(testStructValue.c, resultStructValue.c);
+			Marshal.FreeHGlobal(ptr);
 		}
 
 		[Test]
@@ -105,6 +108,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 			Assert.NotNull(resultStructValue.refType);
 			Assert.AreEqual(stringValue, resultStructValue.refType.s);
 			Assert.AreEqual(testStructValue.c, resultStructValue.c);
+			Marshal.FreeHGlobal(ptr);
 		}
 
 		//From struct to bytes
