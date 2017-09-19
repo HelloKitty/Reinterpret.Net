@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
-#if !NETSTANDARD1_0
 using System.Runtime.InteropServices;
 
 namespace Reinterpret.Net
@@ -21,4 +19,3 @@ namespace Reinterpret.Net
 		internal static int SizeOf { get; } = typeof(TType) == typeof(char) ? 2 : Marshal.SizeOf(typeof(TType));
 	}
 }
-#endif

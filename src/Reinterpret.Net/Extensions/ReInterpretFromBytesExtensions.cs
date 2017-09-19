@@ -40,20 +40,15 @@ namespace Reinterpret.Net
 
 			//We know it's not a primitive so it's a struct, either custom or made by MS/.NET.
 
-#if !NETSTANDARD1_0
-			return ReinterpretCustomStruct<TConvertType>(bytes);
-#else
-			throw new NotSupportedException($"Reinterpreting byte[] to structs is not supported in netstandard1.0 because it lacks the required API.");
-#endif
+			return ReinterpretCustomStruct<TConvertType>(bytes, 0);
 		}
 
 		//This feature is unavailable on Netstandard1.0 because Runtime Interop Services are NOT available
 		//Even as a supplemental nuget package it required netstandard1.1
-#if !NETSTANDARD1_0
-		private unsafe static TConvertType ReinterpretCustomStruct<TConvertType>(byte[] bytes) 
+		private unsafe static TConvertType ReinterpretCustomStruct<TConvertType>(byte[] bytes, int offset) 
 			where TConvertType : struct
 		{
-			fixed(byte* p = bytes)
+			fixed(byte* p = &bytes[offset])
 			{
 #if NET20 || NET30 || NET35 || NET40 || NETSTANDARD1_1
 				return (TConvertType)Marshal.PtrToStructure((IntPtr)p, typeof(TConvertType));
@@ -62,7 +57,6 @@ namespace Reinterpret.Net
 #endif
 			}
 		}
-#endif
 
 		/// <summary>
 		/// Reinterprets the provided <see cref="bytes"/> in a similar fashion to C++
@@ -90,7 +84,22 @@ namespace Reinterpret.Net
 			if(convertTypeInfo.IsPrimitive)
 				return ReinterpretPrimitiveArray<TConvertType>(bytes);
 
-			throw new NotImplementedException();
+			//We must validate that the byte array is the proper size
+			if(bytes.Length % MarshalSizeOf<TConvertType>.SizeOf != 0)
+				throw new InvalidOperationException($"Provided bytes must be a multiple of  {MarshalSizeOf<TConvertType>.SizeOf} to reinterpret to {typeof(TConvertType).Name}.");
+
+			return ReinterpretCustomStructArray<TConvertType>(bytes);
+		}
+
+		private static unsafe TConvertType[] ReinterpretCustomStructArray<TConvertType>(byte[] bytes) 
+			where TConvertType : struct
+		{
+			TConvertType[] result = new TConvertType[bytes.Length / MarshalSizeOf<TConvertType>.SizeOf];
+
+			for(int i = 0; i < bytes.Length / MarshalSizeOf<TConvertType>.SizeOf; i++)
+				result[i] = ReinterpretCustomStruct<TConvertType>(bytes, i * MarshalSizeOf<TConvertType>.SizeOf);
+
+			return result;
 		}
 
 		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes, bool allowDestroyByteArray = false)
