@@ -21,6 +21,9 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The type of the value.</typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
+#if NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value)
 			where TConvertType : struct
 		{
@@ -31,6 +34,9 @@ namespace Reinterpret.Net
 			return ReinterpretFromCustomStruct(value);
 		}
 
+#if NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		private unsafe static byte[] ReinterpretFromCustomStruct<TConvertType>(TConvertType value) 
 			where TConvertType : struct
 		{
@@ -42,6 +48,9 @@ namespace Reinterpret.Net
 			return bytes;
 		}
 
+#if NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		private static unsafe void MarshalValueToByteArray<TConvertType>(TConvertType value, byte[] bytes, int offset) 
 			where TConvertType : struct
 		{
@@ -84,6 +93,9 @@ namespace Reinterpret.Net
 			return bytes;
 		}
 
+#if NET451 || NET46 || NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value) 
 			where TConvertType : struct
 		{

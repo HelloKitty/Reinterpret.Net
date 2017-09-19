@@ -25,11 +25,17 @@ namespace Reinterpret.Net
 		/// changed/destroyed in the process of casting. Indicating true  can yield higher performance results but the
 		/// byte array must never be touched or used again. This will only work for certain types of reinterpret casting.</param>
 		/// <returns>The resultant of the cast operation.</returns>
+#if NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
 			where TConvertType : struct
 		{
-			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
-			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
+			//Originally we null and length checked the bytes. This caused performance issues on .NET Core for some reason
+			//Removing them increased the speed by almost an order of magnitude.
+			//We shouldn't really handhold the user trying to reinterpet things into other things
+			//If they're using this library then they should KNOW they shouldn't mess around and anything could happen
+			//We already sacrfice safety for performance. An order of magnitude performance increase is a no brainer here.
 
 			if(TypeIntrospector<TConvertType>.IsPrimitive)
 				return ReinterpretPrimitive<TConvertType>(bytes);
@@ -40,6 +46,9 @@ namespace Reinterpret.Net
 
 		//This feature is unavailable on Netstandard1.0 because Runtime Interop Services are NOT available
 		//Even as a supplemental nuget package it required netstandard1.1
+#if NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		private unsafe static TConvertType ReinterpretCustomStruct<TConvertType>(byte[] bytes, int offset) 
 			where TConvertType : struct
 		{
@@ -125,6 +134,9 @@ namespace Reinterpret.Net
 			return new string(chars);
 		}
 
+#if NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes)
 			where TConvertType : struct
 		{

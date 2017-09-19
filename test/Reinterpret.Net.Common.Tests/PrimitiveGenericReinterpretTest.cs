@@ -92,6 +92,31 @@ namespace Reinterpret.Net.NetFramework.Tests
 				Assert.AreEqual(expectedResult[i], result[i]);
 		}
 
+		//This tests the TTypeToTest[] reinterpetability
+		[Test]
+		public void TestCanReinterpretToArrayTypeWithIntactTypeIntrospection()
+		{
+			//arrange
+			byte[] realBytes = ValuesToTest
+				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[] { (byte)(dynamic)v } : (byte[])BitConverter.GetBytes((dynamic)v))
+				.ToArray();
+
+			//act
+			TTypeToTest[] result = realBytes.ReinterpretToArray<TTypeToTest>();
+
+			//assert
+			TTypeToTest[] expectedResult = ValuesToTest.ToArray();
+
+			Assert.AreEqual(expectedResult.GetType(), result.GetType());
+			Assert.AreEqual(expectedResult.GetType().GetElementType(), result.GetType().GetElementType());
+			Assert.AreEqual(expectedResult.GetType().Name, result.GetType().Name);
+			Assert.AreEqual(expectedResult.GetType().UnderlyingSystemType, result.GetType().UnderlyingSystemType);
+			Assert.AreEqual(expectedResult.ToArray().GetType(), result.ToArray().GetType());
+			Assert.AreEqual(expectedResult.ToList().GetType(), result.ToList().GetType());
+			Assert.AreEqual(expectedResult.ToList().Count(), result.ToList().Count());
+			Assert.AreEqual(expectedResult.ToList().Where(t => true).ToArray().GetType(), result.ToList().Where(t => true).ToArray().GetType());
+		}
+
 		//This tests the TTypeToTest[] to bytes reinterpetability
 		[Test]
 		public void TestCanReinterpretFromArrayType()

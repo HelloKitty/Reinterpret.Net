@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Reinterpret.Net
 {
@@ -18,6 +19,9 @@ namespace Reinterpret.Net
 		/// </summary>
 		internal static int SizeOf { get; } = ComputeSizeOf();
 
+#if NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		private static int ComputeSizeOf()
 		{
 			if(typeof(TType) == typeof(char))
