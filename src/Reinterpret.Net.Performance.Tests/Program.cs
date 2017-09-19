@@ -26,10 +26,12 @@ namespace Reinterpret.Net.Performance.Tests
 
 		private static void ReinterpretInt32ToBytesTest(Stopwatch watch)
 		{
+			//prewarm
+			5.Reinterpret();
 			PauseGC();
 			watch.Start();
 			for(int i = 0; i < TenMillion; i++)
-				5.Reinterpret();
+				5.Reinterpret()[0] = 6;
 			watch.Stop();
 			ResumeGC();
 
@@ -38,10 +40,15 @@ namespace Reinterpret.Net.Performance.Tests
 
 		private static void BitConverterInt32ToBytesTest(byte[] bytes, Stopwatch watch)
 		{
+			//prewarm
+			bytes = BitConverter.GetBytes(5);
 			PauseGC();
 			watch.Start();
 			for(int i = 0; i < TenMillion; i++)
+			{
 				bytes = BitConverter.GetBytes(5);
+				bytes[0] = 6;
+			}
 			watch.Stop();
 			ResumeGC();
 

@@ -1,7 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+
+//This is a nuget package that is for unsafe .NET operations
+//It only supports newer versions of .NET though
+//The newer versions of dotnet utilize the Unsafe type seen in the new BitConverter https://github.com/dotnet/coreclr/blob/master/src/mscorlib/shared/System/BitConverter.cs
+//In other versions of .NET the BitConverter will be much slower and our fallback pointer hacking will be quick by comparision
+#if NET46 || NETSTANDARD1_1
+using System.Runtime.CompilerServices;
+#endif
 
 namespace Reinterpret.Net
 {
@@ -90,7 +99,17 @@ namespace Reinterpret.Net
 				return *((char*)bytePtr);
 		}
 
-		#region TOBYTES
+#if NET46 || NETSTANDARD1_1
+		internal unsafe static byte[] ReinterpretToBytes<TType>(TType value)
+			where TType : struct
+		{
+			byte[] bytes = new byte[MarshalSizeOf<TType>.SizeOf];
+
+			Unsafe.As<byte, TType>(ref bytes[0]) = value;
+
+			return bytes;
+		}
+#else
 		//TO BYTES
 		internal unsafe static byte[] ReinterpretToBytes(int value)
 		{
@@ -191,6 +210,7 @@ namespace Reinterpret.Net
 
 			return bytes;
 		}
-		#endregion
+#endif
+
 	}
 }

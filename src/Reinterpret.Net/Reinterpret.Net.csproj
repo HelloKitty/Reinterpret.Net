@@ -12,4 +12,16 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
+      <Version>4.4.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
+      <Version>4.4.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>
