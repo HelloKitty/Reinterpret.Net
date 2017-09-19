@@ -16,6 +16,17 @@ namespace Reinterpret.Net
 		/// <summary>
 		/// Indicates the size of the <typeparamref name="TType"/> struct.
 		/// </summary>
-		internal static int SizeOf { get; } = typeof(TType) == typeof(char) ? 2 : Marshal.SizeOf(typeof(TType));
+		internal static int SizeOf { get; } = ComputeSizeOf();
+
+		private static int ComputeSizeOf()
+		{
+			if(typeof(TType) == typeof(char))
+				return 2;
+
+			if(typeof(TType) == typeof(bool))
+				return 1;
+
+			return Marshal.SizeOf(typeof(TType));
+		}
 	}
 }

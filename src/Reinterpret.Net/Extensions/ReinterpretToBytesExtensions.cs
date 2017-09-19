@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -24,7 +25,7 @@ namespace Reinterpret.Net
 			where TConvertType : struct
 		{
 			if(TypeIntrospector<TConvertType>.IsPrimitive)
-				return PrimitiveReinterpretCasts.ReinterpretToBytes(value);
+				return ReinterpretFromPrimitive(value);
 
 			//At this point it's likely to be a custom struct which must be marshalled
 			return ReinterpretFromCustomStruct(value);
@@ -86,71 +87,11 @@ namespace Reinterpret.Net
 		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value) 
 			where TConvertType : struct
 		{
-			Type convertType = typeof(TConvertType);
+			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf];
 
-			//.NET does not support Type switch cases
-			if(convertType == typeof(int))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((int)(object)value);
-			}
-			else if(convertType == typeof(Int64))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((long)(object)value);
-			}
-			else if(convertType == typeof(float))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((float)(object)value);
-			}
-			else if(convertType == typeof(double))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((double)(object)value);
-			}
-			else if(convertType == typeof(short))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((short)(object)value);
-			}
-			else if(convertType == typeof(ushort))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((ushort)(object)value);
-			}
-			else if(convertType == typeof(UInt32))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((uint)(object)value);
-			}
-			else if(convertType == typeof(UInt64))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((ulong)(object)value);
-			}
-			else if(convertType == typeof(byte))
-			{
-				byte castedValue = (byte)(object)value;
-				return new byte[] { castedValue };
-			}
-			else if(convertType == typeof(sbyte))
-			{
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((sbyte)(object)value);
-			}
-			else if(convertType == typeof(bool))
-			{
-				bool castedValue = (bool) (object) value;
-				return new byte[] {castedValue ? (byte)1 : (byte)0 };
-			}
-			else if(convertType == typeof(char))
-			{
-				return PrimitiveReinterpretCasts.ReinterpretToBytes((char)(object)value);
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
+			Unsafe.As<byte, TConvertType>(ref bytes[0]) = value;
+
+			return bytes;
 		}
 
 		//TODO: Can we access the underlying char array as UTF16 without copying? unions produce ASCII encoded array

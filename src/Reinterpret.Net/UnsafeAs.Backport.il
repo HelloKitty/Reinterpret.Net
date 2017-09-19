@@ -17,13 +17,21 @@
 .corflags            0x00020003  
 
 .class public auto ansi abstract sealed beforefieldinit Reinterpret.Net.Unsafe
-    extends [mscorlib]System.Object
-{    
-.method public hidebysig static !!TTo& As<TFrom, TTo> (
-            !!TFrom& source
-        ) cil managed aggressiveinlining 
-    {
-        IL_0000: ldarg.0
-        IL_0001: ret
-    }
+	extends [mscorlib]System.Object
+{
+	.method public hidebysig static !!TTo& As<TFrom, TTo>(!!TFrom& source) cil managed aggressiveinlining
+	{
+		.maxstack 1
+		ldarg.0
+		ret
+	} // end of method Unsafe::As
+
+	.method public hidebysig static !!T ReadUnaligned<T>(uint8& source) cil managed aggressiveinlining
+	{
+		.maxstack 1
+		ldarg.0        
+		unaligned. 0x1
+		ldobj !!T
+		ret
+	} // end of method Unsafe::ReadUnaligned
 }

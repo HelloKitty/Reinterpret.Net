@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -30,16 +31,10 @@ namespace Reinterpret.Net
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) throw new ArgumentException("Value cannot be an empty collection.", nameof(bytes));
 
-#if NETSTANDARD1_0 || NETSTANDARD1_1
-			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
-#else
-			Type convertTypeInfo = typeof(TConvertType);
-#endif
-			if(convertTypeInfo.IsPrimitive)
+			if(TypeIntrospector<TConvertType>.IsPrimitive)
 				return ReinterpretPrimitive<TConvertType>(bytes);
 
 			//We know it's not a primitive so it's a struct, either custom or made by MS/.NET.
-
 			return ReinterpretCustomStruct<TConvertType>(bytes, 0);
 		}
 
@@ -90,7 +85,6 @@ namespace Reinterpret.Net
 
 			return ReinterpretCustomStructArray<TConvertType>(bytes);
 		}
-
 		private static unsafe TConvertType[] ReinterpretCustomStructArray<TConvertType>(byte[] bytes) 
 			where TConvertType : struct
 		{
@@ -132,75 +126,9 @@ namespace Reinterpret.Net
 		}
 
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes)
+			where TConvertType : struct
 		{
-			//For performance we don't recheck the parameters.
-
-			Type convertType = typeof(TConvertType);
-
-			//.NET does not support Type switch cases
-			if(convertType == typeof(int))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToInt32(bytes);
-			}
-			else if(convertType == typeof(Int64))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToInt64(bytes);
-			}
-			else if(convertType == typeof(float))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToFloat(bytes);
-			}
-			else if(convertType == typeof(double))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToDouble(bytes);
-			}
-			else if(convertType == typeof(short))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToInt16(bytes);
-			}
-			else if(convertType == typeof(ushort))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToUInt16(bytes);
-			}
-			else if(convertType == typeof(UInt32))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToUInt32(bytes);
-			}
-			else if(convertType == typeof(UInt64))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToUInt64(bytes);
-			}
-			else if(convertType == typeof(byte))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)bytes[0];
-			}
-			else if(convertType == typeof(sbyte))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToSByte(bytes);
-			}
-			else if(convertType == typeof(bool))
-			{
-				//TODO: Can we avoid this boxing somehow?
-				return (TConvertType)(object)(bytes[0] != 0);
-			}
-			else if(convertType == typeof(char))
-			{
-				return (TConvertType)(object)PrimitiveReinterpretCasts.ReinterpretToChar(bytes);
-			}
-			else
-			{
-				throw new NotSupportedException($"Primitive reinterpting is not implemented for {typeof(TConvertType).Name}");
-			}
+			return Unsafe.ReadUnaligned<TConvertType>(ref bytes[0]);
 		}
 	}
 }
