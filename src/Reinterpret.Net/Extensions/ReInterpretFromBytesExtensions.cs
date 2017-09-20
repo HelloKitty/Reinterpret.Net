@@ -29,7 +29,7 @@ namespace Reinterpret.Net
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
-			where TConvertType : struct
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			//Originally we null and length checked the bytes. This caused performance issues on .NET Core for some reason
 			//Removing them increased the speed by almost an order of magnitude.
@@ -37,29 +37,10 @@ namespace Reinterpret.Net
 			//If they're using this library then they should KNOW they shouldn't mess around and anything could happen
 			//We already sacrfice safety for performance. An order of magnitude performance increase is a no brainer here.
 
-			if(TypeIntrospector<TConvertType>.IsPrimitive)
-				return ReinterpretPrimitive<TConvertType>(bytes);
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
 
-			//We know it's not a primitive so it's a struct, either custom or made by MS/.NET.
-			return ReinterpretCustomStruct<TConvertType>(bytes, 0);
-		}
-
-		//This feature is unavailable on Netstandard1.0 because Runtime Interop Services are NOT available
-		//Even as a supplemental nuget package it required netstandard1.1
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-		private unsafe static TConvertType ReinterpretCustomStruct<TConvertType>(byte[] bytes, int offset) 
-			where TConvertType : struct
-		{
-			fixed(byte* p = &bytes[offset])
-			{
-#if NET20 || NET30 || NET35 || NET40 || NETSTANDARD1_1
-				return (TConvertType)Marshal.PtrToStructure((IntPtr)p, typeof(TConvertType));
-#else
-				return Marshal.PtrToStructure<TConvertType>((IntPtr)p);
-#endif
-			}
+			return ReinterpretPrimitive<TConvertType>(bytes);
 		}
 
 		/// <summary>
@@ -74,35 +55,19 @@ namespace Reinterpret.Net
 		/// byte array must never be touched or used again. This will only work for certain types of reinterpret casting.</param>
 		/// <returns>The resultant of the cast operation.</returns>
 		public static unsafe TConvertType[] ReinterpretToArray<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
-			where TConvertType : struct
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			//Don't check nullness for perf. Callers shouldn't give us null arrays
 			if(bytes.Length == 0) return new TConvertType[0];
 
-			//We can only handle primitive arrays
-			if(TypeIntrospector<TConvertType>.IsPrimitive)
-				return ReinterpretPrimitiveArray<TConvertType>(bytes);
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
 
-			//TOOD: Should we bother checking this?
-			//We must validate that the byte array is the proper size
-			if(bytes.Length % MarshalSizeOf<TConvertType>.SizeOf != 0)
-				throw new InvalidOperationException($"Provided bytes must be a multiple of {MarshalSizeOf<TConvertType>.SizeOf} to reinterpret to {typeof(TConvertType).Name}.");
-
-			return ReinterpretCustomStructArray<TConvertType>(bytes);
-		}
-		private static unsafe TConvertType[] ReinterpretCustomStructArray<TConvertType>(byte[] bytes) 
-			where TConvertType : struct
-		{
-			TConvertType[] result = new TConvertType[bytes.Length / MarshalSizeOf<TConvertType>.SizeOf];
-
-			for(int i = 0; i < bytes.Length / MarshalSizeOf<TConvertType>.SizeOf; i++)
-				result[i] = ReinterpretCustomStruct<TConvertType>(bytes, i * MarshalSizeOf<TConvertType>.SizeOf);
-
-			return result;
+			return ReinterpretPrimitiveArray<TConvertType>(bytes);
 		}
 
 		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes, bool allowDestroyByteArray = false)
-			where TConvertType : struct
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			//If someone happens to ask for the byte representation of bytes
 			if(typeof(TConvertType) == typeof(byte))

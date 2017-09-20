@@ -25,40 +25,12 @@ namespace Reinterpret.Net
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value)
-			where TConvertType : struct
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
-			if(TypeIntrospector<TConvertType>.IsPrimitive)
-				return ReinterpretFromPrimitive(value);
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
 
-			//At this point it's likely to be a custom struct which must be marshalled
-			return ReinterpretFromCustomStruct(value);
-		}
-
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-		private unsafe static byte[] ReinterpretFromCustomStruct<TConvertType>(TConvertType value) 
-			where TConvertType : struct
-		{
-			//TODO: Cache result of Marshal sizeof. If it even works
-			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf];
-
-			MarshalValueToByteArray(value, bytes, 0);
-
-			return bytes;
-		}
-
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-		private static unsafe void MarshalValueToByteArray<TConvertType>(TConvertType value, byte[] bytes, int offset) 
-			where TConvertType : struct
-		{
-			fixed (byte* bPtr = &bytes[offset])
-			{
-				//TODO: Should we delete for any reasons? Should we expose the ability?
-				Marshal.StructureToPtr(value, (IntPtr)bPtr, false);
-			}
+			return ReinterpretFromPrimitive(value);
 		}
 
 		/// <summary>
@@ -72,15 +44,15 @@ namespace Reinterpret.Net
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public unsafe static byte[] Reinterpret<TConvertType>(this TConvertType[] values)
-			where TConvertType : struct
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			//Don't check if null. It's a lot faster not to
 			if(values.Length == 0) return new byte[0];
 
-			if(TypeIntrospector<TConvertType>.IsPrimitive)
-				return values.ToArray().ToByteArrayPerm();
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
 
-			return ReinterpretFromCustomStructArray(values);
+			return values.ToArray().ToByteArrayPerm();
 		}
 
 		/// <summary>
@@ -95,31 +67,15 @@ namespace Reinterpret.Net
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public unsafe static byte[] ReinterpretWithoutPreserving<TConvertType>(this TConvertType[] values)
-			where TConvertType : struct
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			//Don't check if null. It's a lot faster not to
 			if(values.Length == 0) return new byte[0];
 
-			if(TypeIntrospector<TConvertType>.IsPrimitive)
-				return values.ToByteArrayPerm();
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
 
-			return ReinterpretFromCustomStructArray(values);
-		}
-
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-		private static unsafe byte[] ReinterpretFromCustomStructArray<TConvertType>(TConvertType[] values) 
-			where TConvertType : struct
-		{
-			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf * values.Length];
-
-			for(int i = 0; i < values.Length; i++)
-			{
-				MarshalValueToByteArray(values[i], bytes, i * MarshalSizeOf<TConvertType>.SizeOf);
-			}
-
-			return bytes;
+			return values.ToByteArrayPerm();
 		}
 
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0

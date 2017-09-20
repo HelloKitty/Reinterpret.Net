@@ -42,6 +42,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			//assert
 			Assert.AreEqual(valueToTest, value, $"Result from reinterpret cast was not the same.");
+			Assert.AreEqual(valueToTest.GetType(), value.GetType(), $"Result from reinterpret cast was not the same Type.");
 		}
 
 		[Test]
@@ -70,6 +71,8 @@ namespace Reinterpret.Net.NetFramework.Tests
 			//assert
 			for(int i = 0; i < bytes.Length; i++)
 				Assert.AreEqual(bytes[i], result[i], $"Result index: {i} from reinterpret cast was not the same.");
+
+			Assert.IsTrue(result.GetType() == typeof(byte[]));
 		}
 
 		//This tests the TTypeToTest[] reinterpetability
@@ -90,6 +93,8 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			for(int i = 0; i < expectedResult.Length; i++)
 				Assert.AreEqual(expectedResult[i], result[i]);
+
+			Assert.IsTrue(result.GetType() == typeof(TTypeToTest[]));
 		}
 
 		//This tests the TTypeToTest[] reinterpetability

@@ -48,7 +48,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomStructReinterpretCastTests.cs" />
     <Compile Include="Primitives\BoolReinterpretCastTests.cs" />
     <Compile Include="Primitives\ByteReinterpretCastTests.cs" />
     <Compile Include="Primitives\CharReinterpretCastTests.cs" />

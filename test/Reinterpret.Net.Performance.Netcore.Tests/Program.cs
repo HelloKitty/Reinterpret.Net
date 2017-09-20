@@ -48,6 +48,7 @@ namespace Reinterpret.Net.Performance.Tests
 			watch.Reset();
 
 			ReinterpretInt32ArrayToBytesWithDestroyArray(watch);
+			watch.Reset();
 
 			Console.ReadKey();
 		}
@@ -100,26 +101,14 @@ namespace Reinterpret.Net.Performance.Tests
 
 		private static void ReinterpretInt32ArrayToBytesWithDestroyArray(Stopwatch watch)
 		{
-			GC.TryStartNoGCRegion(5000000, true);
 			//prewarm
 			PauseGC();
 			watch.Start();
 			for(int i = 0; i < multipleArrays.Length; i++)
 				multipleArrays[i].ReinterpretWithoutPreserving();
 
-			try
-			{
-				GC.EndNoGCRegion();
-			}
-			catch(Exception e)
-			{
-				Console.WriteLine(e);
-				throw;
-			}
-
 			watch.Stop();
 			ResumeGC();
-
 
 			Console.WriteLine($"Reinterpret (DESTROY) Int32[] to bytes: {watch.Elapsed}");
 		}
