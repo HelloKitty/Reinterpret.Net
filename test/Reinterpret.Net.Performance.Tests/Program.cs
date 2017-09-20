@@ -18,7 +18,7 @@ namespace Reinterpret.Net.Performance.Tests
 
 		public static int[] testIntArray = Enumerable.Range(0, 7000).ToArray();
 
-		public static int[][] multipleArrays = Enumerable.Repeat(testIntArray, 7000)
+		public static int[][] multipleArrays = Enumerable.Repeat(testIntArray, OneThousand)
 			.Select(a => a.ToArray()).ToArray();
 
 		static void Main(string[] args)
