@@ -19,14 +19,7 @@
 .class public auto ansi abstract sealed beforefieldinit Reinterpret.Net.PointerHelper
 	extends [mscorlib]System.Object
 {
-		.method public hidebysig specialname rtspecialname instance void .ctor () cil managed 
-	{
-		IL_0000: ldarg.0
-		IL_0001: call instance void [mscorlib]System.Object::.ctor()
-		IL_0006: ret
-	}
-
-	.method public hidebysig static valuetype [mscorlib]System.UIntPtr GetTypeHeaderValue<T> () cil managed aggressiveinlining 
+	.method public hidebysig static native unsigned int GetTypeHeaderValue<T> () cil managed aggressiveinlining 
 	{
 		.locals init (
 			[0] native int& pinned p
@@ -41,14 +34,14 @@
 		IL_000e: conv.i
 		IL_000f: sizeof Reinterpret.Net.PointerHelper/ArrayHeader
 		IL_0015: sub
-		IL_0016: ldfld valuetype [mscorlib]System.UIntPtr Reinterpret.Net.PointerHelper/ArrayHeader::'type'
+		IL_0016: ldfld native unsigned int Reinterpret.Net.PointerHelper/ArrayHeader::'type'
 		IL_001b: ret
 	}
 
 	.method public hidebysig static void SetTypeAndSize (
 			uint8[] bytes,
-			valuetype [mscorlib]System.UIntPtr 'type',
-			valuetype [mscorlib]System.UIntPtr size
+			native unsigned int 'type',
+			native unsigned int size
 		) cil managed aggressiveinlining 
 	{
 		.locals init (
@@ -65,9 +58,9 @@
 		IL_0010: sub
 		IL_0011: dup
 		IL_0012: ldarg.1
-		IL_0013: stfld valuetype [mscorlib]System.UIntPtr Reinterpret.Net.PointerHelper/ArrayHeader::'type'
+		IL_0013: stfld native unsigned int Reinterpret.Net.PointerHelper/ArrayHeader::'type'
 		IL_0018: ldarg.2
-		IL_0019: stfld valuetype [mscorlib]System.UIntPtr Reinterpret.Net.PointerHelper/ArrayHeader::length
+		IL_0019: stfld native unsigned int Reinterpret.Net.PointerHelper/ArrayHeader::length
 		IL_001e: ldc.i4.0
 		IL_001f: conv.u
 		IL_0020: stloc.0
@@ -80,8 +73,8 @@
 		.pack 1
 		.size 0
 
-		.field public valuetype [mscorlib]System.UIntPtr 'type'
+		.field public native unsigned int 'type'
 
-		.field public valuetype [mscorlib]System.UIntPtr length
+		.field public native unsigned int length
 	}
 }
