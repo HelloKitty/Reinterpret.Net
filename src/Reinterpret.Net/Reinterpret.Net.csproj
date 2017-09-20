@@ -2,6 +2,20 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.1;net40;net451;net46;net40;net35;net30;net20</TargetFrameworks>
+    <Authors>Andrew Blakely, HelloKitty</Authors>
+    <Company>www.github.com/HelloKitty</Company>
+    <Product>www.github.com/HelloKitty/Reinterpret.Net</Product>
+    <PackageId>Reinterpret.Net</PackageId>
+    <Description>Provides high-performance Reinterpret_Cast style extension methods for primitives, primitive arrays and strings. Allows you to convert from bytes or to bytes faster than any thing in .NET through a generic API.
+
+Fastest and most generic conversions to and from bytes.</Description>
+    <Copyright>Andrew Blakely</Copyright>
+    <PackageLicenseUrl>https://github.com/HelloKitty/Reinterpret.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/HelloKitty/Reinterpret.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HelloKitty/Reinterpret.Net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>reinterpret marshal cast reinterpretcast reinterpret_cast memcopy mem copy marshalling performance Reinterpret.Net Andrew Blakely</PackageTags>
+    <NeutralLanguage />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
