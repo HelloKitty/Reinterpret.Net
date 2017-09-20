@@ -21,7 +21,7 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The type of the value.</typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-#if NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value)
@@ -34,7 +34,7 @@ namespace Reinterpret.Net
 			return ReinterpretFromCustomStruct(value);
 		}
 
-#if NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private unsafe static byte[] ReinterpretFromCustomStruct<TConvertType>(TConvertType value) 
@@ -48,7 +48,7 @@ namespace Reinterpret.Net
 			return bytes;
 		}
 
-#if NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private static unsafe void MarshalValueToByteArray<TConvertType>(TConvertType value, byte[] bytes, int offset) 
@@ -68,10 +68,13 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
+#if NET451 || NET46 || NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public unsafe static byte[] Reinterpret<TConvertType>(this TConvertType[] values)
 			where TConvertType : struct
 		{
-			if(values == null) throw new ArgumentNullException(nameof(values));
+			//Don't check if null. It's a lot faster not to
 			if(values.Length == 0) return new byte[0];
 
 			if(TypeIntrospector<TConvertType>.IsPrimitive)
@@ -80,6 +83,9 @@ namespace Reinterpret.Net
 			return ReinterpretFromCustomStructArray(values);
 		}
 
+#if NET451 || NET46 || NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		private static unsafe byte[] ReinterpretFromCustomStructArray<TConvertType>(TConvertType[] values) 
 			where TConvertType : struct
 		{

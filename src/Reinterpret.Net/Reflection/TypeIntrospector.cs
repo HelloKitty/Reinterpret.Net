@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Reinterpret.Net
@@ -13,5 +14,7 @@ namespace Reinterpret.Net
 #else
 		typeof(TType).GetTypeInfo().IsPrimitive;
 #endif
+
+		public static UIntPtr ArrayTypeHeader { get; } = PointerHelper.GetTypeHeaderValue<TType>();
 	}
 }

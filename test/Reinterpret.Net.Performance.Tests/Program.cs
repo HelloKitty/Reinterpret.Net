@@ -12,6 +12,12 @@ namespace Reinterpret.Net.Performance.Tests
 	{
 		public static int TenMillion { get; } = 10000000;
 
+		public static int OneHundredThousand { get; } = TenMillion / 100;
+
+		public static int OneThousand { get; } = OneHundredThousand / 100;
+
+		public static int[] testIntArray = Enumerable.Range(0, 7000).ToArray();
+
 		static void Main(string[] args)
 		{
 			Console.ReadKey();
@@ -27,6 +33,15 @@ namespace Reinterpret.Net.Performance.Tests
 			watch.Reset();
 
 			ReinterpretInt32FromBytesTest(watch);
+			watch.Reset();
+
+			ReinterpretInt32ArrayToBytes(watch);
+			watch.Reset();
+
+			BitConverterInt32ArrayToBytes(watch);
+			watch.Reset();
+
+			BlockCopyInt32ArrayToBytes(watch);
 
 			Console.ReadKey();
 		}
@@ -35,10 +50,12 @@ namespace Reinterpret.Net.Performance.Tests
 		{
 			//prewarm
 			5.Reinterpret();
-			PauseGC();
+			int testVal = 5;
 			watch.Start();
+
 			for(int i = 0; i < TenMillion; i++)
-				5.Reinterpret()[0] = 6;
+				testVal.Reinterpret();
+
 			watch.Stop();
 			ResumeGC();
 
@@ -61,6 +78,20 @@ namespace Reinterpret.Net.Performance.Tests
 			Console.WriteLine($"Reinterpret Bytes to Int32: {watch.Elapsed}");
 		}
 
+		private static void ReinterpretInt32ArrayToBytes(Stopwatch watch)
+		{
+			//prewarm
+			PauseGC();
+			watch.Start();
+			for(int i = 0; i < OneThousand; i++)
+				testIntArray.Reinterpret();
+
+			watch.Stop();
+			ResumeGC();
+
+			Console.WriteLine($"Reinterpret Int32[] to bytes: {watch.Elapsed}");
+		}
+
 		private static void BitConverterInt32ToBytesTest(byte[] bytes, Stopwatch watch)
 		{
 			//prewarm
@@ -70,7 +101,6 @@ namespace Reinterpret.Net.Performance.Tests
 			for(int i = 0; i < TenMillion; i++)
 			{
 				bytes = BitConverter.GetBytes(5);
-				bytes[0] = 6;
 			}
 			watch.Stop();
 			ResumeGC();
@@ -92,6 +122,37 @@ namespace Reinterpret.Net.Performance.Tests
 			ResumeGC();
 
 			Console.WriteLine($"BitConverter Bytes to Int32: {watch.Elapsed}");
+		}
+
+		private static void BitConverterInt32ArrayToBytes(Stopwatch watch)
+		{
+			//prewarm
+			PauseGC();
+			watch.Start();
+			for(int i = 0; i < OneThousand; i++)
+				testIntArray.SelectMany(j => BitConverter.GetBytes(j)).ToArray();
+
+			watch.Stop();
+			ResumeGC();
+
+			Console.WriteLine($"BitConverter (LINQ) Int32[] to bytes: {watch.Elapsed}");
+		}
+
+		private static void BlockCopyInt32ArrayToBytes(Stopwatch watch)
+		{
+			//prewarm
+			PauseGC();
+			watch.Start();
+			for(int i = 0; i < OneThousand; i++)
+			{
+				byte[] result = new byte[testIntArray.Length * sizeof(int)];
+				Buffer.BlockCopy(testIntArray, 0, result, 0, result.Length);
+			}
+
+			watch.Stop();
+			ResumeGC();
+
+			Console.WriteLine($"BlockCopy Int32[] to bytes: {watch.Elapsed}");
 		}
 
 		public static void PauseGC()

@@ -38,8 +38,8 @@
 		IL_001b: ret
 	}
 
-	.method public hidebysig static void SetTypeAndSize (
-			uint8[] bytes,
+	.method public hidebysig static void SetTypeAndSize<T>(
+			!!T[] values,
 			native unsigned int 'type',
 			native unsigned int size
 		) cil managed aggressiveinlining 
@@ -50,7 +50,7 @@
 
 		IL_0000: ldarg.0
 		IL_0001: ldc.i4.0
-		IL_0002: ldelema [mscorlib]System.Byte
+		IL_0002: ldelema !!T
 		IL_0007: stloc.0
 		IL_0008: ldloc.0
 		IL_0009: conv.i

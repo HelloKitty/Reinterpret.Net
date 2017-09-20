@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.1;net40;net451;net46;net40;net35;net30;net20</TargetFrameworks>
+    <TargetFrameworks>net40;net451;net46;net40;net35;net30;net20</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -48,10 +48,16 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
       <Version>4.4.0</Version>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PointerHelper.Netframework">
+      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
