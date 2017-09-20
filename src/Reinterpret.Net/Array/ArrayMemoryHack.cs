@@ -204,12 +204,5 @@ namespace Reinterpret.Net
 				pHeader->length = (UIntPtr)(arrayCount * sizeOfTargetType);
 			}
 		}
-
-		public static void ConvertOtherTypeToByteType(void* arrayPointer, int lengthOfCollection, int sizeOfTargetType)
-		{
-			var pHeader = ArrayMemoryHack.GetHeaderPointer(arrayPointer);
-			pHeader->type = ArrayMemoryHack.BYTE_ARRAY_TYPE;
-			pHeader->length = (UIntPtr)(lengthOfCollection / sizeOfTargetType);
-		}
 	}
 }
