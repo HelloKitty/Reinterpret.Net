@@ -83,6 +83,29 @@ namespace Reinterpret.Net
 			return ReinterpretFromCustomStructArray(values);
 		}
 
+		/// <summary>
+		/// High performance but unsafe version that reinterprets the provided <see cref="value"/> array to the byte representation.
+		/// WARNING: This version will NOT leave the <see cref="values"/> array intact. It will be
+		/// left in an invalid state.
+		/// </summary>
+		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
+#if NET451 || NET46 || NETSTANDARD1_1
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		public unsafe static byte[] ReinterpretWithoutPreserving<TConvertType>(this TConvertType[] values)
+			where TConvertType : struct
+		{
+			//Don't check if null. It's a lot faster not to
+			if(values.Length == 0) return new byte[0];
+
+			if(TypeIntrospector<TConvertType>.IsPrimitive)
+				return values.ToByteArrayPerm();
+
+			return ReinterpretFromCustomStructArray(values);
+		}
+
 #if NET451 || NET46 || NETSTANDARD1_1
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
