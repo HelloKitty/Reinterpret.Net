@@ -19,7 +19,7 @@ namespace Reinterpret.Net
 		/// </summary>
 		internal static int SizeOf { get; } = ComputeSizeOf();
 
-#if NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private static int ComputeSizeOf()

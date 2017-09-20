@@ -18,6 +18,9 @@ namespace Reinterpret.Net.Performance.Tests
 
 		public static int[] testIntArray = Enumerable.Range(0, 7000).ToArray();
 
+		public static int[][] multipleArrays = Enumerable.Repeat(testIntArray, OneThousand)
+			.Select(a => a.ToArray()).ToArray();
+
 		static void Main(string[] args)
 		{
 			Console.ReadKey();
@@ -42,6 +45,9 @@ namespace Reinterpret.Net.Performance.Tests
 			watch.Reset();
 
 			BlockCopyInt32ArrayToBytes(watch);
+			watch.Reset();
+
+			ReinterpretInt32ArrayToBytesWithDestroyArray(watch);
 
 			Console.ReadKey();
 		}
@@ -90,6 +96,32 @@ namespace Reinterpret.Net.Performance.Tests
 			ResumeGC();
 
 			Console.WriteLine($"Reinterpret Int32[] to bytes: {watch.Elapsed}");
+		}
+
+		private static void ReinterpretInt32ArrayToBytesWithDestroyArray(Stopwatch watch)
+		{
+			GC.TryStartNoGCRegion(5000000, true);
+			//prewarm
+			PauseGC();
+			watch.Start();
+			for(int i = 0; i < multipleArrays.Length; i++)
+				multipleArrays[i].ReinterpretWithoutPreserving();
+
+			try
+			{
+				GC.EndNoGCRegion();
+			}
+			catch(Exception e)
+			{
+				Console.WriteLine(e);
+				throw;
+			}
+
+			watch.Stop();
+			ResumeGC();
+
+
+			Console.WriteLine($"Reinterpret (DESTROY) Int32[] to bytes: {watch.Elapsed}");
 		}
 
 		private static void BitConverterInt32ToBytesTest(byte[] bytes, Stopwatch watch)

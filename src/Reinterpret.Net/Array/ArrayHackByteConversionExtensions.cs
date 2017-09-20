@@ -9,7 +9,7 @@ namespace Reinterpret.Net
 	//Based on hack from: http://stackoverflow.com/questions/619041/what-is-the-fastest-way-to-convert-a-float-to-a-byte
 	internal static unsafe class ArrayHackByteConversionExtensions
 	{
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static TConvertedType[] ToConvertedArrayPerm<TConvertedType>(this byte[] bytes)
@@ -25,7 +25,7 @@ namespace Reinterpret.Net
 			return results;
 		}
 
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static byte[] ToByteArrayPerm<TConvertType>(this TConvertType[] values)

@@ -21,7 +21,7 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The type of the value.</typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value)
@@ -34,7 +34,7 @@ namespace Reinterpret.Net
 			return ReinterpretFromCustomStruct(value);
 		}
 
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private unsafe static byte[] ReinterpretFromCustomStruct<TConvertType>(TConvertType value) 
@@ -48,7 +48,7 @@ namespace Reinterpret.Net
 			return bytes;
 		}
 
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private static unsafe void MarshalValueToByteArray<TConvertType>(TConvertType value, byte[] bytes, int offset) 
@@ -68,7 +68,7 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public unsafe static byte[] Reinterpret<TConvertType>(this TConvertType[] values)
@@ -91,7 +91,7 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public unsafe static byte[] ReinterpretWithoutPreserving<TConvertType>(this TConvertType[] values)
@@ -106,7 +106,7 @@ namespace Reinterpret.Net
 			return ReinterpretFromCustomStructArray(values);
 		}
 
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private static unsafe byte[] ReinterpretFromCustomStructArray<TConvertType>(TConvertType[] values) 
@@ -122,7 +122,7 @@ namespace Reinterpret.Net
 			return bytes;
 		}
 
-#if NET451 || NET46 || NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value) 

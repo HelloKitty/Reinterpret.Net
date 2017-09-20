@@ -25,7 +25,7 @@ namespace Reinterpret.Net
 		/// changed/destroyed in the process of casting. Indicating true  can yield higher performance results but the
 		/// byte array must never be touched or used again. This will only work for certain types of reinterpret casting.</param>
 		/// <returns>The resultant of the cast operation.</returns>
-#if NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
@@ -46,7 +46,7 @@ namespace Reinterpret.Net
 
 		//This feature is unavailable on Netstandard1.0 because Runtime Interop Services are NOT available
 		//Even as a supplemental nuget package it required netstandard1.1
-#if NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private unsafe static TConvertType ReinterpretCustomStruct<TConvertType>(byte[] bytes, int offset) 
@@ -76,21 +76,17 @@ namespace Reinterpret.Net
 		public static unsafe TConvertType[] ReinterpretToArray<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
 			where TConvertType : struct
 		{
-			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
+			//Don't check nullness for perf. Callers shouldn't give us null arrays
 			if(bytes.Length == 0) return new TConvertType[0];
 
-#if NETSTANDARD1_0 || NETSTANDARD1_1
-			TypeInfo convertTypeInfo = typeof(TConvertType).GetTypeInfo();
-#else
-			Type convertTypeInfo = typeof(TConvertType);
-#endif
 			//We can only handle primitive arrays
-			if(convertTypeInfo.IsPrimitive)
+			if(TypeIntrospector<TConvertType>.IsPrimitive)
 				return ReinterpretPrimitiveArray<TConvertType>(bytes);
 
+			//TOOD: Should we bother checking this?
 			//We must validate that the byte array is the proper size
 			if(bytes.Length % MarshalSizeOf<TConvertType>.SizeOf != 0)
-				throw new InvalidOperationException($"Provided bytes must be a multiple of  {MarshalSizeOf<TConvertType>.SizeOf} to reinterpret to {typeof(TConvertType).Name}.");
+				throw new InvalidOperationException($"Provided bytes must be a multiple of {MarshalSizeOf<TConvertType>.SizeOf} to reinterpret to {typeof(TConvertType).Name}.");
 
 			return ReinterpretCustomStructArray<TConvertType>(bytes);
 		}
@@ -134,7 +130,7 @@ namespace Reinterpret.Net
 			return new string(chars);
 		}
 
-#if NETSTANDARD1_1
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes)
