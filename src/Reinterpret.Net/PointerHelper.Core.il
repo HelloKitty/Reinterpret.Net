@@ -9,9 +9,20 @@
 
 .assembly PointerHelper.Core
 {
-  .hash algorithm 0x00008004
-  .ver 1:0:0:0
+	.hash algorithm 0x00008004
+	.ver 1:0:0:0
+
+	.custom instance void [CORE_ASSEMBLY]System.Runtime.CompilerServices.InternalsVisibleToAttribute::.ctor(string) =
+	{
+		string( 'Reinterpret.Net' )
+	}
 }
+
+.custom instance void [CORE_ASSEMBLY]System.Runtime.CompilerServices.InternalsVisibleToAttribute::.ctor(string) =
+{
+	string( 'Reinterpret.Net' )
+}
+
 .module PointerHelper.Core.dll
 
 .imagebase           0x00400000
@@ -20,7 +31,7 @@
 .subsystem           0x0003       
 .corflags            0x00020003  
 
-.class public auto ansi abstract sealed beforefieldinit Reinterpret.Net.PointerHelper
+.class private auto ansi abstract sealed beforefieldinit Reinterpret.Net.PointerHelper
 	extends [CORE_ASSEMBLY]System.Object
 {
 	.method public hidebysig static native unsigned int GetTypeHeaderValue<T> () cil managed aggressiveinlining 

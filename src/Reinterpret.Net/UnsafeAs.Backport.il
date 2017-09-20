@@ -5,9 +5,15 @@
 }
 .assembly UnsafeAs.Backport
 {
-  .hash algorithm 0x00008004
-  .ver 1:0:0:0
+	.hash algorithm 0x00008004
+	.ver 1:0:0:0
+
+	.custom instance void [mscorlib]System.Runtime.CompilerServices.InternalsVisibleToAttribute::.ctor(string) =
+	{
+		string( 'Reinterpret.Net' )
+	}
 }
+
 .module UnsafeAs.Backport.dll
 
 .imagebase           0x00400000
@@ -16,7 +22,7 @@
 .subsystem           0x0003       
 .corflags            0x00020003  
 
-.class public auto ansi abstract sealed beforefieldinit Reinterpret.Net.Unsafe
+.class private auto ansi abstract sealed beforefieldinit Reinterpret.Net.Unsafe
 	extends [mscorlib]System.Object
 {
 	.method public hidebysig static !!TTo& As<TFrom, TTo>(!!TFrom& source) cil managed aggressiveinlining
