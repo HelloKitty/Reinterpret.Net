@@ -11,3 +11,11 @@ foreach($f in Get-ChildItem ./src/)
         Start-Process dotnet $projectArgs -Wait
     }
 }
+
+Start-Process ILRepack.exe "/out:.\src\Reinterpret.Net\bin\Release\net20\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net20\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net20\PointerHelper.Netframework.dll .\src\Reinterpret.Net\bin\Release\net20\UnsafeAs.Backport.dll" -Wait
+Start-Process ILRepack.exe "/out:.\src\Reinterpret.Net\bin\Release\net30\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net30\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net30\PointerHelper.Netframework.dll .\src\Reinterpret.Net\bin\Release\net30\UnsafeAs.Backport.dll" -Wait
+Start-Process ILRepack.exe "/out:.\src\Reinterpret.Net\bin\Release\net35\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net35\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net35\PointerHelper.Netframework.dll .\src\Reinterpret.Net\bin\Release\net35\UnsafeAs.Backport.dll" -Wait
+Start-Process ILRepack.exe "/out:.\src\Reinterpret.Net\bin\Release\net40\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net40\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net40\PointerHelper.Netframework.dll .\src\Reinterpret.Net\bin\Release\net40\UnsafeAs.Backport.dll" -Wait
+Start-Process ILRepack.exe "/out:.\src\Reinterpret.Net\bin\Release\net451\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net451\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net451\PointerHelper.Netframework.dll" -Wait
+Start-Process ILRepack.exe "/out:.\src\Reinterpret.Net\bin\Release\net46\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net46\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\net46\PointerHelper.Netframework.dll" -Wait
+Start-Process ILRepack.exe "/out:.\src\Reinterpret.Net\bin\Release\netstandard1.1\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\netstandard1.1\Reinterpret.Net.dll .\src\Reinterpret.Net\bin\Release\netstandard1.1\PointerHelper.Core.dll" -Wait
