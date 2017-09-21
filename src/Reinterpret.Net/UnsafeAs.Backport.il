@@ -40,4 +40,12 @@
 		ldobj !!T
 		ret
 	} // end of method Unsafe::ReadUnaligned
+
+	.method public hidebysig static void* AsPointer<T>(!!T& 'value') cil managed aggressiveinlining
+	{
+		.maxstack 1
+		ldarg.0
+		conv.u
+		ret
+	} // end of method Unsafe::AsPointer
 }

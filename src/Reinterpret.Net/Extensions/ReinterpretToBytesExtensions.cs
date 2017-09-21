@@ -60,6 +60,21 @@ namespace Reinterpret.Net
 		}
 
 		/// <summary>
+		/// Reinterprets the provided <see cref="values"/> array to a byte pointer.
+		/// </summary>
+		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
+		/// <param name="values">The array to reinterpret.</param>
+		/// <returns>A byte pointer to the values array.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		public unsafe static byte* ReinterpretToPointer<TConvertType>(this TConvertType[] values)
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+		{
+			return (byte*)Unsafe.AsPointer(ref values[0]);
+		}
+
+		/// <summary>
 		/// High performance but unsafe version that reinterprets the provided <see cref="values"/> array to the byte representation.
 		/// WARNING: This version will NOT leave the <see cref="values"/> array intact. It will be left in an invalid state.
 		/// </summary>
