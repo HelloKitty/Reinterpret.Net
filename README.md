@@ -95,13 +95,11 @@ To compile or open Reinterpret.Net project you'll first need a couple of things:
 
 ## Builds
 
-NuGet: TODO
+NuGet: [Reinterpret.Net](https://www.nuget.org/packages/Reinterpret.Net/)
 
 Myget: [![hellokitty MyGet Build Status](https://www.myget.org/BuildSource/Badge/hellokitty?identifier=ae62f610-d20e-43d6-b0de-23563c551b75)](https://www.myget.org/)
 
 ## Tests
-
-TODO actual tests
 
 |    | Linux Debug | Windows .NET Debug |
 |:---|----------------:|------------------:|
