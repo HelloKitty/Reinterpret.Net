@@ -78,7 +78,7 @@ Performance differs between framework versions. BitConverter in older versions o
 
 **.NETFramework2.0 - .NETFramework3.5**
 
-![Showcase](https://i.imgur.com/D6fOkDs.png "Perf")
+![Showcase](https://i.imgur.com/iRCKUy3.png "Perf")
 ![Showcase](https://i.imgur.com/caPH5K6.png "Perf")
 ![Showcase](https://i.imgur.com/DXUFHQ2.png "Perf")
 
