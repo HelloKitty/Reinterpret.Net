@@ -31,11 +31,7 @@ int intValue = bytes.Reinterpret<int>();
 Converting from a byte\[\] to a string (default unicode encoding)
 ```csharp
 byte[] bytes = GetBytes();
-string result = bytes.ReinterpretToString();
-```
-```csharp
-byte[] bytes = GetBytes();
-string result = bytes.Reinterpret(Encoding.Unicode);
+string result = bytes.Reinterpret();
 ```
 
 Converting from a byte\[\] to a primitive array
