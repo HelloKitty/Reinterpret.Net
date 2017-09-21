@@ -63,7 +63,15 @@ namespace Reinterpret.Net
 			if(typeof(TConvertType) == typeof(byte))
 				return bytes as TConvertType[];
 
-			return bytes.ToArray().ToConvertedArrayPerm<TConvertType>();
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
+
+			//BlockCopy is slightly faster if we have to reallocate
+			TConvertType[] convertedValues = new TConvertType[unchecked(bytes.Length / MarshalSizeOf<TConvertType>.SizeOf)];
+
+			Buffer.BlockCopy(bytes, 0, convertedValues, 0, bytes.Length);
+
+			return convertedValues;
 		}
 
 		/// <summary>

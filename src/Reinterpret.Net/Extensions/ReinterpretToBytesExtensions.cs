@@ -50,8 +50,13 @@ namespace Reinterpret.Net
 
 			if(!TypeIntrospector<TConvertType>.IsPrimitive)
 				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
+			
+			//BlockCopy is slightly faster if we have to reallocate
+			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf * values.Length];
 
-			return values.ToArray().ToByteArrayPerm();
+			Buffer.BlockCopy(values, 0, bytes, 0, MarshalSizeOf<TConvertType>.SizeOf * values.Length);
+
+			return bytes;
 		}
 
 		/// <summary>
