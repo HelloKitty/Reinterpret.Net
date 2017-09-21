@@ -15,20 +15,15 @@ namespace Reinterpret.Net
 	public static class ReInterpretFromBytesExtensions
 	{
 		/// <summary>
-		/// Reinterprets the provided <see cref="bytes"/> in a similar fashion to C++
-		/// reinterpret_cast by casting the byte chunk into the specified generic type
-		/// <typeparamref name="TConvetType"/>.
+		/// Reinterprets the provided <see cref="bytes"/> to the specified generic value type.
 		/// </summary>
 		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
 		/// <param name="bytes">The bytes chunk.</param>
-		/// <param name="allowDestroyByteArray ">Indicates if the provided <see cref="bytes"/> array can be modified or 
-		/// changed/destroyed in the process of casting. Indicating true  can yield higher performance results but the
-		/// byte array must never be touched or used again. This will only work for certain types of reinterpret casting.</param>
-		/// <returns>The resultant of the cast operation.</returns>
+		/// <returns>The converted value.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
+		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes)
 			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			//Originally we null and length checked the bytes. This caused performance issues on .NET Core for some reason
@@ -44,17 +39,12 @@ namespace Reinterpret.Net
 		}
 
 		/// <summary>
-		/// Reinterprets the provided <see cref="bytes"/> in a similar fashion to C++
-		/// reinterpret_cast by casting the byte chunk into the specified generic type
-		/// <typeparamref name="TConvetType"/>.
+		/// Reinterprets the provided <see cref="bytes"/> to the specified generic array of value types.
 		/// </summary>
-		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
+		/// <typeparam name="TConvertType">The element type to reinterpret to.</typeparam>
 		/// <param name="bytes">The bytes chunk.</param>
-		/// <param name="allowDestroyByteArray ">Indicates if the provided <see cref="bytes"/> array can be modified or 
-		/// changed/destroyed in the process of casting. Indicating true  can yield higher performance results but the
-		/// byte array must never be touched or used again. This will only work for certain types of reinterpret casting.</param>
-		/// <returns>The resultant of the cast operation.</returns>
-		public static unsafe TConvertType[] ReinterpretToArray<TConvertType>(this byte[] bytes, bool allowDestroyByteArray = false)
+		/// <returns>The array of converted values.</returns>
+		public static unsafe TConvertType[] ReinterpretToArray<TConvertType>(this byte[] bytes)
 			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			//Don't check nullness for perf. Callers shouldn't give us null arrays
@@ -66,35 +56,60 @@ namespace Reinterpret.Net
 			return ReinterpretPrimitiveArray<TConvertType>(bytes);
 		}
 
-		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes, bool allowDestroyByteArray = false)
+		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes)
 			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
 			//If someone happens to ask for the byte representation of bytes
 			if(typeof(TConvertType) == typeof(byte))
 				return bytes as TConvertType[];
 
-			return allowDestroyByteArray ? bytes.ToConvertedArrayPerm<TConvertType>() : bytes.ToArray().ToConvertedArrayPerm<TConvertType>();
+			return bytes.ToArray().ToConvertedArrayPerm<TConvertType>();
 		}
 
 		/// <summary>
-		/// High performance reinterpret cast for the <see cref="bytes"/> converting
-		/// the byte chunk to a <see cref="string"/> using Unicode encoding (2byte char).
+		/// Reinterprets the provided <see cref="bytes"/> to a C# standard UTF16 encoded (2 byte char) string.
 		/// </summary>
 		/// <param name="bytes">The bytes chunk.</param>
-		/// <param name="allowDestroyByteArray ">Indicates if the provided <see cref="bytes"/> array can be modified or 
-		/// changed/destroyed in the process of casting. Indicates that it can will yield higher performance results but the
-		/// byte array must never be touched or used again. </param>
-		/// <returns>The resultant of the cast operation.</returns>
-		public static unsafe string ReinterpretToString(this byte[] bytes, bool allowDestroyByteArray = false)
+		/// <returns>The converted UTF16 string.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		public static unsafe string ReinterpretToString(this byte[] bytes)
 		{
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) return "";
 
 			//The caller may want to reuse the byte array so we check if they will allow us to destroy it
-			char[] chars = allowDestroyByteArray ? bytes.ToConvertedArrayPerm<char>() : bytes.ToArray().ToConvertedArrayPerm<char>();
-			return new string(chars);
+			char[] chars = bytes.ToArray().ToConvertedArrayPerm<char>();
+			return Unsafe.As<char[], string>(ref chars);
 		}
 
+		/// <summary>
+		/// High performance: unsafely Reinterprets the provided <see cref="bytes"/> 
+		/// to a C# standard UTF16 encoded (2 byte char) string.
+		/// The original bytes array will be left in an INVALID state and should be considered destroyed.
+		/// </summary>
+		/// <param name="bytes">The bytes chunk. (Invalid after calling)</param>
+		/// <returns>The converted UTF16 string.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		public static unsafe string ReinterpretToStringWithoutPreserving(this byte[] bytes)
+		{
+			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
+			if(bytes.Length == 0) return "";
+
+			//this will destroy the original byte array
+			char[] chars = bytes.ToConvertedArrayPerm<char>();
+			return Unsafe.As<char[], string>(ref chars);
+		}
+
+		/// <summary>
+		/// Reinterprets the <see cref="bytes"/> to the specified primitive type.
+		/// </summary>
+		/// <typeparam name="TConvertType">The type to convert to.</typeparam>
+		/// <param name="bytes">The bytes to convert from.</param>
+		/// <returns>The converted value.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif

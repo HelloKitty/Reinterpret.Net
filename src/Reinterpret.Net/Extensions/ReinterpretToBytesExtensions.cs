@@ -11,16 +11,15 @@ namespace Reinterpret.Net
 	/// <summary>
 	/// Extension methods that cast to <see cref="byte"/>s from
 	/// the specified target Type.
-	/// </summary
+	/// </summary>
 	public static class ReinterpretToBytesExtensions
 	{
 		/// <summary>
-		/// Reinterprets the provided <see cref="value"/> value to the C# standard
-		/// byte array representation.
+		/// Reinterprets the provided <see cref="value"/> to the byte array representation.
 		/// </summary>
 		/// <typeparam name="TConvertType">The type of the value.</typeparam>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="value">The value to convert.</param>
+		/// <returns>The byte array representation of the value.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -34,12 +33,12 @@ namespace Reinterpret.Net
 		}
 
 		/// <summary>
-		/// Reinterprets the provided <see cref="value"/> array to the byte representation
+		/// Reinterprets the provided <see cref="values"/> array to the byte representation
 		/// of the array.
 		/// </summary>
 		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="values">The array to reinterpret.</param>
+		/// <returns>The byte represenation of the values.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -56,13 +55,12 @@ namespace Reinterpret.Net
 		}
 
 		/// <summary>
-		/// High performance but unsafe version that reinterprets the provided <see cref="value"/> array to the byte representation.
-		/// WARNING: This version will NOT leave the <see cref="values"/> array intact. It will be
-		/// left in an invalid state.
+		/// High performance but unsafe version that reinterprets the provided <see cref="values"/> array to the byte representation.
+		/// WARNING: This version will NOT leave the <see cref="values"/> array intact. It will be left in an invalid state.
 		/// </summary>
 		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="values">The values to permantely destroy and convert.</param>
+		/// <returns>The values reinterpreted into bytes.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
@@ -93,11 +91,13 @@ namespace Reinterpret.Net
 
 		//TODO: Can we access the underlying char array as UTF16 without copying? unions produce ASCII encoded array
 		/// <summary>
-		/// Reinterprets the provided <see cref="value"/>
+		/// Reinterprets the provided UTF16 string into its byte representation.
 		/// </summary>
-		/// <typeparam name="TConvertType"></typeparam>
-		/// <param name="value"></param>
-		/// <returns></returns>
+		/// <param name="value">The string to convert.</param>
+		/// <returns>The byte represenation of the UTF16 string.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
 		public static byte[] ReinterpretFromString(this string value)
 		{
 			if(value == null) throw new ArgumentNullException(nameof(value));
