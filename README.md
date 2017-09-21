@@ -70,6 +70,22 @@ byte[] bytes = GetBytes();
 string result = bytes.ReinterpretToStringWithoutPreserving();
 ```
 
+## Performance Comparisions
+
+Performance differs between framework versions. BitConverter in older versions of .NETFramework is slower and in the .NET Core Corefx repo it's implemented in a significantly different way. All these effect the comparisions but Reinterpret.NET is still faster, especially the dangerous no allocation verion, with only BlockCopy being competitive due its unmanaged implementation.
+
+**.NET Core and >=.NETFramework4.0**
+
+![Showcase](https://i.imgur.com/U97V9Vr.png "Perf")
+![Showcase](https://i.imgur.com/ktVaxic.png "Perf")
+![Showcase](https://i.imgur.com/fTXbDjt.png "Perf")
+
+**.NETFramework2.0 - .NETFramework3.5**
+
+![Showcase](https://i.imgur.com/D6fOkDs.png "Perf")
+![Showcase](https://i.imgur.com/caPH5K6.png "Perf")
+![Showcase](https://i.imgur.com/DXUFHQ2.png "Perf")
+
 ## Setup
 
 To compile or open Reinterpret.Net project you'll first need a couple of things:
