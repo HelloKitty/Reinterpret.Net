@@ -1,8 +1,10 @@
 # Reinterpret.Net
 
+Reinterpret.Net supports >=.NETFramework2.0 and .NET Core.
+
 Reinterpret.Net is a .NET library that allows users to take advantage of [C++-style reinterpret casts](http://en.cppreference.com/w/cpp/language/reinterpret_cast) in .NET. It's built using a collection of generic extension methods meaning integration is simple.
 
-It supports casting from bytes to primitives or strings and from primitives and strings to bytes.
+It supports casting from bytes to primitives or strings and from primitives and strings to bytes and even supports primitive arrays.
 
 ## Features
 - [x] **Performance**
@@ -40,6 +42,32 @@ Converting from a byte\[\] to a primitive array
 ```csharp
 byte[] bytes = GetBytes();
 int[] result = bytes.ReinterpretToArray<int>();
+```
+
+The extension method API allows you to perform operations that feel like LINQ
+Letting you reinterpret from an int32 array to a UTF16 string if you so choose.
+```csharp
+int32[] values = GetValues()
+string result = values
+    .Reinterpret() //to bytes
+    .ReinterpretToString(); //to string
+```
+### High Performance (UNSAFE)
+
+Reinterpret.Net also offers afew select high performance/unsafe extensions that are incredibly performant and require little to no allocations.
+
+These operations are **DANGEROUS** if you're not careful. They will leave the original object in an invalid state and if not handled properly you can modify and invalidate the internal representation of a string. However this is truly in the spirit of reinterpret_cast.
+
+Reinterprets byte\[\] into int\[\] with no allocation instantly
+```csharp
+byte[] bytes = GetBytes();
+int[] result = bytes.ReinterpretWithoutPerserving();
+```
+
+Reinterprets byte\[\] into string with no allocation instantly (technically produces a mutable string)
+```csharp
+byte[] bytes = GetBytes();
+string result = bytes.ReinterpretToStringWithoutPreserving();
 ```
 
 ## Setup
