@@ -91,6 +91,7 @@ Performance differs between framework versions. BitConverter in older versions o
 To compile or open Reinterpret.Net project you'll first need a couple of things:
 
 * Visual Studio 2017
+* ilasm.exe (For compiling .il files)
 
 ## Builds
 
