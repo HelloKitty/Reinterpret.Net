@@ -22,7 +22,7 @@ namespace Reinterpret.Net.Performance.Tests
 			.Select(a => a.ToArray()).ToArray();
 
 		public static byte[][] MultipleByteStringArray { get; } = Enumerable.Repeat(@"inADUInsafd8hasdf98hdsf89h*(HASD*(HS*(DFbns98dbhsd98dbdgf98bdguisbng98sdng98nSFN*()S(*nSF98nsf89ns89fn*(*(NAMIOPSDOPDSFOP<DX<O", TenMillion)
-			.Select(s => s.ReinterpretFromString())
+			.Select(s => s.Reinterpret())
 			.ToArray();
 
 		public static string TestString = @"inADUInsafd8hasdf98hdsf89h*(HASD*(HS*(DFbns98dbhsd98dbdgf98bdguisbng98sdng98nSFN*()S(*nSF98nsf89ns89fn*(*(NAMIOPSDOPDSFOP<DX<O";
@@ -143,7 +143,7 @@ namespace Reinterpret.Net.Performance.Tests
 			PauseGC();
 			watch.Start();
 			for(int i = 0; i < TenMillion; i++)
-				TestString.ReinterpretFromString();
+				TestString.Reinterpret();
 
 			watch.Stop();
 			ResumeGC();
@@ -154,7 +154,7 @@ namespace Reinterpret.Net.Performance.Tests
 		private static void ReinterpretBytesToString(Stopwatch watch)
 		{
 			//prewarm
-			byte[] bytes = TestString.ReinterpretFromString();
+			byte[] bytes = TestString.Reinterpret();
 			PauseGC();
 			watch.Start();
 			for(int i = 0; i < TenMillion; i++)

@@ -43,7 +43,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 			byte[] bytes = Encoding.Unicode.GetBytes(value);
 
 			//act
-			byte[] result = value.ReinterpretFromString();
+			byte[] result = value.Reinterpret();
 
 			//assert
 			Assert.AreEqual(bytes.Length, result.Length);

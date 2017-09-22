@@ -139,23 +139,5 @@ namespace Reinterpret.Net
 
 			return value.ToCharArray().ToByteArrayPerm();
 		}
-
-		//TODO: Can we access the underlying char array as UTF16 without copying? unions produce ASCII encoded array
-		/// <summary>
-		/// Reinterprets the provided UTF16 string into its byte representation.
-		/// </summary>
-		/// <param name="value">The string to convert.</param>
-		/// <returns>The byte represenation of the UTF16 string.</returns>
-		[Obsolete("Use Reinterpret.")]
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-		public static byte[] ReinterpretFromString(this string value)
-		{
-			if(value == null) throw new ArgumentNullException(nameof(value));
-			if(String.IsNullOrEmpty(value)) return new byte[0];
-
-			return value.ToCharArray().ToByteArrayPerm();
-		}
 	}
 }
