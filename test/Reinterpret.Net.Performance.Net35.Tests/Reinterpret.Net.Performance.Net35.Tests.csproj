@@ -8,9 +8,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Reinterpret.Net.Performance.Net35.Tests</RootNamespace>
     <AssemblyName>Reinterpret.Net.Performance.Net35.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
