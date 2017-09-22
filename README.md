@@ -68,7 +68,7 @@ string result = bytes.ReinterpretToStringWithoutPreserving();
 
 ## Performance Comparisions
 
-Performance differs between framework versions. BitConverter in older versions of .NETFramework is slower and in the .NET Core Corefx repo it's implemented in a significantly different way. All these effect the comparisions but Reinterpret.NET is still faster, especially the dangerous no allocation verion, with only BlockCopy being competitive due its unmanaged implementation.
+Performance differs between framework versions. BitConverter in older versions of .NETFramework is slower and in the .NET Core Corefx repo it's implemented in a significantly different way. All these effect the comparisions but Reinterpret.NET is usually still faster, especially the dangerous no allocation verion, with only BlockCopy being competitive due its unmanaged implementation. However for some unknown reason which doesn't appear to be IL related, could be GC or JIT, the performance of reinterpret suffers on the .NET3.5 and .NET2.0 platforms. In fact it fallback to some official .NET libraries in some areas due to the performance being better. I think it can be explored with more advanced profiling/testing tools. However right now .NET2.0/3.5 support was a bonus, not a true goal.
 
 **.NET Core and >=.NETFramework4.0**
 
@@ -78,9 +78,9 @@ Performance differs between framework versions. BitConverter in older versions o
 
 **.NETFramework2.0 - .NETFramework3.5**
 
-![Showcase](https://i.imgur.com/iRCKUy3.png "Perf")
-![Showcase](https://i.imgur.com/caPH5K6.png "Perf")
-![Showcase](https://i.imgur.com/DXUFHQ2.png "Perf")
+![Showcase](https://i.imgur.com/Cz8AWG1.png "Perf")
+![Showcase](https://i.imgur.com/OTk2X6k.png "Perf")
+![Showcase](https://i.imgur.com/vLtBBiK.png "Perf")
 
 ## Setup
 
