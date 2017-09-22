@@ -18,6 +18,8 @@ namespace Reinterpret.Net
 		/// <returns>A reference to the converted array.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
 #endif
 		public static TConvertedType[] ToConvertedArrayPerm<TConvertedType>(this byte[] bytes)
 			where TConvertedType : struct
@@ -41,6 +43,8 @@ namespace Reinterpret.Net
 		/// <returns>A reference to the byte representation of the array.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
 #endif
 		public static byte[] ToByteArrayPerm<TCurrentType>(this TCurrentType[] values)
 			where TCurrentType : struct

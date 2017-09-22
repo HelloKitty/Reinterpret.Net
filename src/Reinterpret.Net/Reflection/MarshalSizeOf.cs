@@ -21,6 +21,8 @@ namespace Reinterpret.Net
 
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
 #endif
 		private static int ComputeSizeOf()
 		{

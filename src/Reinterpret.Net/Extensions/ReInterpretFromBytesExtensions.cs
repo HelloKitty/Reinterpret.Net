@@ -22,6 +22,8 @@ namespace Reinterpret.Net
 		/// <returns>The converted value.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
 #endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes)
 			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
@@ -47,6 +49,8 @@ namespace Reinterpret.Net
 		/// <returns>The converted value.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
 #endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, int start)
 			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
@@ -100,6 +104,8 @@ namespace Reinterpret.Net
 		/// <returns>The converted UTF16 string.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
 #endif
 		public static unsafe string ReinterpretToString(this byte[] bytes)
 		{
@@ -120,6 +126,8 @@ namespace Reinterpret.Net
 		/// <returns>The converted UTF16 string.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
 #endif
 		public static unsafe string ReinterpretToStringWithoutPreserving(this byte[] bytes)
 		{
@@ -140,6 +148,8 @@ namespace Reinterpret.Net
 		/// <returns>The converted value.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
 #endif
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes, int position = 0)
 			where TConvertType : struct
