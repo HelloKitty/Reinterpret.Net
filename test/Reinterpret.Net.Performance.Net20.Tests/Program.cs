@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Reinterpret.Net.Performance.Tests
 {
@@ -16,65 +15,103 @@ namespace Reinterpret.Net.Performance.Tests
 
 		public static int OneThousand { get; } = OneHundredThousand / 100;
 
-		public static int[] testIntArray = Enumerable.Range(0, 7000).ToArray();
+		public static int[] testIntArray;
 
-		public static int[][] multipleArrays = Enumerable.Repeat(testIntArray, OneThousand)
-			.Select(a => a.ToArray()).ToArray();
+		public static int[][] multipleArrays;
 
-		public static byte[][] MultipleByteStringArray { get; } = Enumerable.Repeat(@"inADUInsafd8hasdf98hdsf89h*(HASD*(HS*(DFbns98dbhsd98dbdgf98bdguisbng98sdng98nSFN*()S(*nSF98nsf89ns89fn*(*(NAMIOPSDOPDSFOP<DX<O", TenMillion)
-			.Select(s => s.Reinterpret())
-			.ToArray();
+		public static byte[][] MultipleByteStringArray;
 
 		public static string TestString = @"inADUInsafd8hasdf98hdsf89h*(HASD*(HS*(DFbns98dbhsd98dbdgf98bdguisbng98sdng98nSFN*()S(*nSF98nsf89ns89fn*(*(NAMIOPSDOPDSFOP<DX<O";
 
 		static void Main(string[] args)
 		{
-			MultipleByteStringArray.ToArray();
-			multipleArrays.ToArray();
+			try
+			{
+				testIntArray = new int[7000];
 
-			Console.ReadKey();
-			byte[] bytes = null;
-			Stopwatch watch = new Stopwatch();
-			BitConverterInt32ToBytesTest(bytes, watch);
-			watch.Reset();
+				for(int i = 0; i < testIntArray.Length; i++)
+					testIntArray[i] = i;
 
-			ReinterpretInt32ToBytesTest(watch);
-			watch.Reset();
+				multipleArrays = new int[OneThousand][];
 
-			BitConverterToInt32FromBytesTest(bytes, watch);
-			watch.Reset();
+				for(int i = 0; i < multipleArrays.Length; i++)
+					multipleArrays[i] = testIntArray;
 
-			ReinterpretInt32FromBytesTest(watch);
-			watch.Reset();
+				MultipleByteStringArray = new byte[TenMillion][];
+				byte[] stringBytes = TestString.Reinterpret();
+				for(int i = 0; i < MultipleByteStringArray.Length; i++)
+					MultipleByteStringArray[i] = stringBytes;
 
-			ReinterpretInt32ArrayToBytes(watch);
-			watch.Reset();
+				Console.ReadKey();
+				byte[] bytes = null;
+				Stopwatch watch = new Stopwatch();
+				BitConverterInt32ToBytesTest(bytes, watch);
+				watch.Reset();
 
-			BitConverterInt32ArrayToBytes(watch);
-			watch.Reset();
+				Console.ReadKey();
 
-			BlockCopyInt32ArrayToBytes(watch);
-			watch.Reset();
+				ReinterpretInt32ToBytesTest(watch);
+				watch.Reset();
 
-			ReinterpretInt32ArrayToBytesWithDestroyArray(watch);
-			watch.Reset();
+				Console.ReadKey();
 
-			ReinterpretStringToBytes(watch);
-			watch.Reset();
+				BitConverterToInt32FromBytesTest(bytes, watch);
+				watch.Reset();
 
-			EncodingUnicodeStringToBytes(watch);
-			watch.Reset();
+				Console.ReadKey();
 
-			ReinterpretBytesToString(watch);
-			watch.Reset();
+				ReinterpretInt32FromBytesTest(watch);
+				watch.Reset();
 
-			EncodingUnicodeBytesToString(watch);
-			watch.Reset();
+				Console.ReadKey();
 
-			ReinterpretBytesToStringDestroy(watch);
-			watch.Reset();
+				ReinterpretInt32ArrayToBytes(watch);
+				watch.Reset();
 
-			Console.ReadKey();
+				Console.ReadKey();
+
+				BlockCopyInt32ArrayToBytes(watch);
+				watch.Reset();
+
+				Console.ReadKey();
+
+				ReinterpretInt32ArrayToBytesWithDestroyArray(watch);
+				watch.Reset();
+
+				Console.ReadKey();
+
+				ReinterpretStringToBytes(watch);
+				watch.Reset();
+
+				Console.ReadKey();
+
+				EncodingUnicodeStringToBytes(watch);
+				watch.Reset();
+
+				Console.ReadKey();
+
+				ReinterpretBytesToString(watch);
+				watch.Reset();
+
+				Console.ReadKey();
+
+				EncodingUnicodeBytesToString(watch);
+				watch.Reset();
+
+				Console.ReadKey();
+
+				ReinterpretBytesToStringDestroy(watch);
+				watch.Reset();
+
+				Console.ReadKey();
+				
+			}
+			catch(Exception e)
+			{
+				Console.WriteLine(e);
+				Console.ReadKey();
+				throw;
+			}
 		}
 
 		private static void ReinterpretInt32ToBytesTest(Stopwatch watch)
@@ -212,20 +249,6 @@ namespace Reinterpret.Net.Performance.Tests
 			Console.WriteLine($"BitConverter Bytes to Int32: {watch.Elapsed}");
 		}
 
-		private static void BitConverterInt32ArrayToBytes(Stopwatch watch)
-		{
-			//prewarm
-			PauseGC();
-			watch.Start();
-			for(int i = 0; i < OneThousand; i++)
-				testIntArray.SelectMany(j => BitConverter.GetBytes(j)).ToArray();
-
-			watch.Stop();
-			ResumeGC();
-
-			Console.WriteLine($"BitConverter (LINQ) Int32[] to bytes: {watch.Elapsed}");
-		}
-
 		private static void BlockCopyInt32ArrayToBytes(Stopwatch watch)
 		{
 			//prewarm
@@ -281,6 +304,17 @@ namespace Reinterpret.Net.Performance.Tests
 		public static void ResumeGC()
 		{
 			GC.Collect();
+		}
+
+		// Converts an int into an array of bytes with length 
+		// four.
+		[System.Security.SecuritySafeCritical]  // auto-generated
+		public unsafe static byte[] GetBytes(int value)
+		{
+			byte[] bytes = new byte[4];
+			fixed (byte* b = bytes)
+				*((int*)b) = value;
+			return bytes;
 		}
 	}
 }

@@ -31,38 +31,38 @@ Fastest and most generic conversions to and from bytes.</Description>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net20'">
-    <Reference Include="UnsafeAs">
-      <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
+    <Reference Include="UnsafeAs.BackportNoAggressive">
+      <HintPath>..\..\lib\UnsafeAs.BackportNoAggressive.dll</HintPath>
     </Reference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
+    <Reference Include="PointerHelper.NetframeworkNoAggressive">
+      <HintPath>..\..\lib\PointerHelper.NetframeworkNoAggressive.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net30'">
-    <Reference Include="UnsafeAs">
-      <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
+    <Reference Include="UnsafeAs.BackportNoAggressive">
+      <HintPath>..\..\lib\UnsafeAs.BackportNoAggressive.dll</HintPath>
     </Reference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
+    <Reference Include="PointerHelper.NetframeworkNoAggressive">
+      <HintPath>..\..\lib\PointerHelper.NetframeworkNoAggressive.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
-    <Reference Include="UnsafeAs">
-      <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
+    <Reference Include="UnsafeAs.BackportNoAggressive">
+      <HintPath>..\..\lib\UnsafeAs.BackportNoAggressive.dll</HintPath>
     </Reference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
+    <Reference Include="PointerHelper.NetframeworkNoAggressive">
+      <HintPath>..\..\lib\PointerHelper.NetframeworkNoAggressive.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
-    <Reference Include="UnsafeAs">
-      <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
+    <Reference Include="UnsafeAs.BackportNoAggressive">
+      <HintPath>..\..\lib\UnsafeAs.BackportNoAggressive.dll</HintPath>
     </Reference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
+    <Reference Include="PointerHelper.NetframeworkNoAggressive">
+      <HintPath>..\..\lib\PointerHelper.NetframeworkNoAggressive.dll</HintPath>
     </Reference>
   </ItemGroup>
 
