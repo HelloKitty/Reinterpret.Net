@@ -7,7 +7,7 @@ foreach($f in Get-ChildItem ./src/)
     {
         ##Add the project path + the csproj name and add the include referenced projects argument which will
         ##force nuget dependencies
-        $projectArgs = "pack " + (Join-Path (Join-Path src/ $f.Name) $ff.Name)## + " -IncludeReferencedProjects"
+        $projectArgs = "pack " + (Join-Path (Join-Path src/ $f.Name) $ff.Name)## + "-c Release -IncludeReferencedProjects"
         Start-Process dotnet $projectArgs -Wait
     }
 }
