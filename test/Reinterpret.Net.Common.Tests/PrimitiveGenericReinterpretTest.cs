@@ -36,6 +36,26 @@ namespace Reinterpret.Net.NetFramework.Tests
 			//arrange
 			//We abuse the DLR so that we can keep this generic
 			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			byte[] buffer = new byte[255];
+
+			for(int i = 0; i < bytes.Length; i++)
+				buffer[i + 25] = bytes[i];
+
+			//act
+			TTypeToTest value = buffer.Reinterpret<TTypeToTest>(25);
+
+			//assert
+			Assert.AreEqual(valueToTest, value, $"Result from reinterpret cast was not the same.");
+			Assert.AreEqual(valueToTest.GetType(), value.GetType(), $"Result from reinterpret cast was not the same Type.");
+		}
+
+		[Test]
+		[TestCaseSource(nameof(ValuesToTest))]
+		public void TestCanReinterpretToTypeTypeWithExistingBuffer(TTypeToTest valueToTest)
+		{
+			//arrange
+			//We abuse the DLR so that we can keep this generic
+			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
 
 			//act
 			TTypeToTest value = bytes.Reinterpret<TTypeToTest>();
