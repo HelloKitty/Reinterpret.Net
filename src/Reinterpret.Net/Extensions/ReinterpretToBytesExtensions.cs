@@ -33,6 +33,24 @@ namespace Reinterpret.Net
 		}
 
 		/// <summary>
+		/// Reinterprets the provided <see cref="value"/> to the byte array representation.
+		/// </summary>
+		/// <typeparam name="TConvertType">The type of the value.</typeparam>
+		/// <param name="value">The value to convert.</param>
+		/// <returns>The passed in byte array for fluent chaining.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		public static byte[] Reinterpret<TConvertType>(this TConvertType value, byte[] bytes, int start)
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+		{
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
+
+			return ReinterpretFromPrimitive(value, bytes, start);
+		}
+
+		/// <summary>
 		/// Reinterprets the provided <see cref="values"/> array to the byte representation
 		/// of the array.
 		/// </summary>
@@ -104,7 +122,16 @@ namespace Reinterpret.Net
 		{
 			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf];
 
-			Unsafe.As<byte, TConvertType>(ref bytes[0]) = value;
+			return ReinterpretFromPrimitive(value, bytes, 0);
+		}
+
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value, byte[] bytes, int start)
+			where TConvertType : struct
+		{
+			Unsafe.As<byte, TConvertType>(ref bytes[start]) = value;
 
 			return bytes;
 		}

@@ -75,6 +75,37 @@ namespace Reinterpret.Net.NetFramework.Tests
 			Assert.IsTrue(result.GetType() == typeof(byte[]));
 		}
 
+		[Test]
+		[TestCaseSource(nameof(ValuesToTest))]
+		public void TestCanReinterpretValueIntoBytes(TTypeToTest valueToTest)
+		{
+			//arrange
+			//We abuse the DLR so that we can keep this generic
+			byte[] bytes = null;
+			byte[] resultBytes = new byte[255];
+
+			//For testing purposes we can't use GetBytes on the byte type
+			if(typeof(TTypeToTest) == typeof(byte))
+				bytes = new byte[] { (byte)(object)valueToTest };
+			else if(typeof(TTypeToTest) == typeof(sbyte))
+				unchecked
+				{
+					bytes = new byte[] { (byte)(sbyte)(object)valueToTest };
+				}
+			else
+				bytes = BitConverter.GetBytes((dynamic)valueToTest);
+
+
+			//act
+			valueToTest.Reinterpret(resultBytes, 0);
+
+			//assert
+			for(int i = 0; i < bytes.Length; i++)
+				Assert.AreEqual(bytes[i], resultBytes[i], $"Result index: {i} from reinterpret cast was not the same.");
+
+			Assert.IsTrue(resultBytes.GetType() == typeof(byte[]));
+		}
+
 		//This tests the TTypeToTest[] reinterpetability
 		[Test]
 		public void TestCanReinterpretToArrayType()
