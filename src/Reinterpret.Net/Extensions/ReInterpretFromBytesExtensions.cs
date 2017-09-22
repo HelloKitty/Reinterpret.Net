@@ -39,6 +39,25 @@ namespace Reinterpret.Net
 		}
 
 		/// <summary>
+		/// Reinterprets the provided <see cref="bytes"/> to the specified generic value type.
+		/// </summary>
+		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
+		/// <param name="bytes">The bytes chunk.</param>
+		/// <param name="start">The starting position to read the <typeparamref name="TConvertType"/> value from.</param>
+		/// <returns>The converted value.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, int start)
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+		{
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
+
+			return ReinterpretPrimitive<TConvertType>(bytes, start);
+		}
+
+		/// <summary>
 		/// Reinterprets the provided <see cref="bytes"/> to the specified generic array of value types.
 		/// </summary>
 		/// <typeparam name="TConvertType">The element type to reinterpret to.</typeparam>
@@ -117,14 +136,15 @@ namespace Reinterpret.Net
 		/// </summary>
 		/// <typeparam name="TConvertType">The type to convert to.</typeparam>
 		/// <param name="bytes">The bytes to convert from.</param>
+		/// <param name="position">The position to begin reading from.</param>
 		/// <returns>The converted value.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes)
+		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes, int position = 0)
 			where TConvertType : struct
 		{
-			return Unsafe.ReadUnaligned<TConvertType>(ref bytes[0]);
+			return Unsafe.ReadUnaligned<TConvertType>(ref bytes[position]);
 		}
 	}
 }

@@ -37,6 +37,8 @@ namespace Reinterpret.Net
 		/// </summary>
 		/// <typeparam name="TConvertType">The type of the value.</typeparam>
 		/// <param name="value">The value to convert.</param>
+		/// <param name="bytes">The buffer to write/reinterpret into.</param>
+		/// <param name="start">The position in the buffer to start writing into.</param>
 		/// <returns>The passed in byte array for fluent chaining.</returns>
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -75,21 +77,6 @@ namespace Reinterpret.Net
 			Buffer.BlockCopy(values, 0, bytes, 0, MarshalSizeOf<TConvertType>.SizeOf * values.Length);
 
 			return bytes;
-		}
-
-		/// <summary>
-		/// Reinterprets the provided <see cref="values"/> array to a byte pointer.
-		/// </summary>
-		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
-		/// <param name="values">The array to reinterpret.</param>
-		/// <returns>A byte pointer to the values array.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
-		public unsafe static byte* ReinterpretToPointer<TConvertType>(this TConvertType[] values)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
-		{
-			return (byte*)Unsafe.AsPointer(ref values[0]);
 		}
 
 		/// <summary>

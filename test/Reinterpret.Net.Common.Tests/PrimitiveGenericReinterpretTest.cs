@@ -97,11 +97,11 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 
 			//act
-			valueToTest.Reinterpret(resultBytes, 0);
+			valueToTest.Reinterpret(resultBytes, 5);
 
 			//assert
 			for(int i = 0; i < bytes.Length; i++)
-				Assert.AreEqual(bytes[i], resultBytes[i], $"Result index: {i} from reinterpret cast was not the same.");
+				Assert.AreEqual(bytes[i], resultBytes[i + 5], $"Result index: {i} from reinterpret cast was not the same.");
 
 			Assert.IsTrue(resultBytes.GetType() == typeof(byte[]));
 		}
@@ -171,23 +171,6 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			for(int i = 0; i < realBytes.Length; i++)
 				Assert.AreEqual(realBytes[i], result[i]);
-		}
-
-		//This tests the TTypeToTest[] to bytes reinterpetability
-		[Test]
-		public unsafe void TestToBytePointerEqualsReinterpret()
-		{
-			//arrange
-			byte[] realBytes = ValuesToTest.ToArray().Reinterpret();
-
-			//act
-			byte* bytePtr = ValuesToTest.ToArray().ReinterpretToPointer();
-
-			//assert
-			Assert.AreEqual(realBytes.Length, realBytes.Length, $"Calculated invalid Length for Type: {typeof(TTypeToTest).Name}");
-
-			for(int i = 0; i < realBytes.Length; i++)
-				Assert.AreEqual(realBytes[i], bytePtr[i]);
 		}
 
 		//Tests to see that empty arrays are handleable
