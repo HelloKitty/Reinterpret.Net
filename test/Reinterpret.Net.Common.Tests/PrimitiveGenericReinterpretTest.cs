@@ -51,6 +51,19 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 		[Test]
 		[TestCaseSource(nameof(ValuesToTest))]
+		public void TestDoestCrashIfInvalidByteArrayLengthForType(TTypeToTest valueToTest)
+		{
+			//arrange
+			//We abuse the DLR so that we can keep this generic
+			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			bytes = bytes.Skip(1).ToArray();
+
+			//assert
+			Assert.DoesNotThrow(() => bytes.Reinterpret<TTypeToTest>());
+		}
+
+		[Test]
+		[TestCaseSource(nameof(ValuesToTest))]
 		public void TestCanReinterpretToTypeTypeWithExistingBuffer(TTypeToTest valueToTest)
 		{
 			//arrange
@@ -146,6 +159,27 @@ namespace Reinterpret.Net.NetFramework.Tests
 				Assert.AreEqual(expectedResult[i], result[i]);
 
 			Assert.IsTrue(result.GetType() == typeof(TTypeToTest[]));
+		}
+
+		[Test]
+		public void TestThrowsOnReinterpretToArrayTypeIfSourceBytesAreInvalidLengthForElementType()
+		{
+			//These will always be valid
+			if(typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(bool) || typeof(TTypeToTest) == typeof(sbyte))
+				return;
+
+			//arrange
+			byte[] realBytes = ValuesToTest
+				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[] { (byte)(dynamic)v } : (byte[])BitConverter.GetBytes((dynamic)v))
+				.ToArray();
+
+			IList<byte> byteList = realBytes.ToList();
+			byteList.Add(0);
+
+			realBytes = byteList.ToArray();
+
+			//act
+			Assert.Throws<InvalidOperationException>(() => realBytes.ReinterpretToArray<TTypeToTest>(), $"Expected invalid length for Type: {typeof(TTypeToTest).Name} but didn't throw");
 		}
 
 		//This tests the TTypeToTest[] reinterpetability

@@ -76,7 +76,33 @@ namespace Reinterpret.Net
 			if(!TypeIntrospector<TConvertType>.IsPrimitive)
 				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
 
+			if(bytes.Length % MarshalSizeOf<TConvertType>.SizeOf != 0)
+				ThrowHelpers.ThrowMismatchedArraySizeForElementType<char>();
+
 			return ReinterpretPrimitiveArray<TConvertType>(bytes);
+		}
+
+		//TODO: Document
+		/// <summary>
+		///  High performance: Unsafely reinterprets the provided <see cref="bytes"/> 
+		/// to the specified generic array of value types.
+		/// </summary>
+		/// <typeparam name="TConvertType">The element type to reinterpret to.</typeparam>
+		/// <param name="bytes">The bytes chunk.</param>
+		/// <returns>The array of converted values.</returns>
+		public static unsafe TConvertType[] ReinterpretToArrayWithoutPerserving<TConvertType>(this byte[] bytes)
+			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+		{
+			//Don't check nullness for perf. Callers shouldn't give us null arrays
+			if(bytes.Length == 0) return new TConvertType[0];
+
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
+
+			if(bytes.Length % MarshalSizeOf<TConvertType>.SizeOf != 0)
+				ThrowHelpers.ThrowMismatchedArraySizeForElementType<TConvertType>();
+
+			return bytes.ToConvertedArrayPerm<TConvertType>();
 		}
 
 		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes)
@@ -85,9 +111,6 @@ namespace Reinterpret.Net
 			//If someone happens to ask for the byte representation of bytes
 			if(typeof(TConvertType) == typeof(byte))
 				return bytes as TConvertType[];
-
-			if(!TypeIntrospector<TConvertType>.IsPrimitive)
-				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
 
 			//BlockCopy is slightly faster if we have to reallocate
 			TConvertType[] convertedValues = new TConvertType[unchecked(bytes.Length / MarshalSizeOf<TConvertType>.SizeOf)];
@@ -112,9 +135,17 @@ namespace Reinterpret.Net
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) return "";
 
+			if(bytes.Length % 2 != 0)
+				ThrowHelpers.ThrowMismatchedArraySizeForElementType<char>();
+
+			//In older versions of .NET the reinterprting profiles slowly, for some reason, and in the case of
+			//strings it's significantly slower than the unicode encoding implementation
+#if NET20 || NET30 || NET35
+			return Encoding.Unicode.GetString(bytes);
+#else
 			//The caller may want to reuse the byte array so we check if they will allow us to destroy it
-			char[] chars = bytes.ToArray().ToConvertedArrayPerm<char>();
-			return Unsafe.As<char[], string>(ref chars);
+			return new string(bytes.ToArray().ToConvertedArrayPerm<char>());//Unsafe.As<char[], string>(ref chars);
+#endif
 		}
 
 		/// <summary>
@@ -133,6 +164,9 @@ namespace Reinterpret.Net
 		{
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) return "";
+
+			if(bytes.Length % 2 != 0)
+				ThrowHelpers.ThrowMismatchedArraySizeForElementType<char>();
 
 			//this will destroy the original byte array
 			char[] chars = bytes.ToConvertedArrayPerm<char>();

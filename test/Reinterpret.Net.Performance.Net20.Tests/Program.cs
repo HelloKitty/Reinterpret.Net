@@ -46,7 +46,7 @@ namespace Reinterpret.Net.Performance.Tests
 				Console.ReadKey();
 				byte[] bytes = null;
 				Stopwatch watch = new Stopwatch();
-				BitConverterInt32ToBytesTest(bytes, watch);
+				/*BitConverterInt32ToBytesTest(bytes, watch);
 				watch.Reset();
 
 
@@ -85,7 +85,7 @@ namespace Reinterpret.Net.Performance.Tests
 				EncodingUnicodeStringToBytes(watch);
 				watch.Reset();
 
-				Console.ReadKey();
+				Console.ReadKey();*/
 
 				ReinterpretBytesToString(watch);
 				watch.Reset();
