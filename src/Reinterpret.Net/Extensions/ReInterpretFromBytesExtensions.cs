@@ -26,7 +26,7 @@ namespace Reinterpret.Net
 		[MethodImpl(256)]
 #endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			//Originally we null and length checked the bytes. This caused performance issues on .NET Core for some reason
 			//Removing them increased the speed by almost an order of magnitude.
@@ -53,7 +53,7 @@ namespace Reinterpret.Net
 		[MethodImpl(256)]
 #endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, int start)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			if(!TypeIntrospector<TConvertType>.IsPrimitive)
 				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
@@ -68,7 +68,7 @@ namespace Reinterpret.Net
 		/// <param name="bytes">The bytes chunk.</param>
 		/// <returns>The array of converted values.</returns>
 		public static unsafe TConvertType[] ReinterpretToArray<TConvertType>(this byte[] bytes)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			//Don't check nullness for perf. Callers shouldn't give us null arrays
 			if(bytes.Length == 0) return new TConvertType[0];
@@ -83,7 +83,7 @@ namespace Reinterpret.Net
 		}
 
 		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			//If someone happens to ask for the byte representation of bytes
 			if(typeof(TConvertType) == typeof(byte))

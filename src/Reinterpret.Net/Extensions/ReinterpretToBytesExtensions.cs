@@ -26,7 +26,7 @@ namespace Reinterpret.Net
 		[MethodImpl(256)]
 #endif
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			if(!TypeIntrospector<TConvertType>.IsPrimitive)
 				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
@@ -48,7 +48,7 @@ namespace Reinterpret.Net
 		[MethodImpl(256)]
 #endif
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value, byte[] bytes, int start)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			if(!TypeIntrospector<TConvertType>.IsPrimitive)
 				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
@@ -69,7 +69,7 @@ namespace Reinterpret.Net
 		[MethodImpl(256)]
 #endif
 		public unsafe static byte[] Reinterpret<TConvertType>(this TConvertType[] values)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
+			where TConvertType : struct
 		{
 			//Don't check if null. It's a lot faster not to
 			if(values.Length == 0) return new byte[0];
