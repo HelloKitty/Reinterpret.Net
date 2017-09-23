@@ -2,12 +2,11 @@
 
 Reinterpret.Net supports >=.NETFramework2.0 and .NET Core.
 
-Reinterpret.Net is a .NET library that allows users to take advantage of [C++-style reinterpret casts](http://en.cppreference.com/w/cpp/language/reinterpret_cast) in .NET. It's built using a collection of generic extension methods meaning integration is simple.
+Reinterpret.Net is a .NET library that allows users to take advantage of an API like the [C++-style reinterpret casts](http://en.cppreference.com/w/cpp/language/reinterpret_cast) in .NET. It's built using a collection of generic extension methods meaning integration is simple.
 
 It supports casting from bytes to primitives or strings and from primitives and strings to bytes and even supports primitive arrays.
 
 ## Features
-- [x] **Performance**
 - [x] **Netstandard1.1**
 - [ ] **Netstandard2.0**
 - [x] .NETFramework >= 2.0
@@ -50,37 +49,21 @@ string result = values
 ```
 ### High Performance (UNSAFE)
 
-Reinterpret.Net also offers afew select high performance/unsafe extensions that are incredibly performant and require little to no allocations.
-
-These operations are **DANGEROUS** if you're not careful. They will leave the original object in an invalid state and if not handled properly you can modify and invalidate the internal representation of a string. However this is truly in the spirit of reinterpret_cast.
-
-Reinterprets byte\[\] into int\[\] with no allocation instantly
-```csharp
-byte[] bytes = GetBytes();
-int[] result = bytes.ReinterpretWithoutPerserving();
-```
-
-Reinterprets byte\[\] into string with no allocation instantly (technically produces a mutable string)
-```csharp
-byte[] bytes = GetBytes();
-string result = bytes.ReinterpretToStringWithoutPreserving();
-```
+This section orginally described a key feature to the library. That feature has since been removed due to [Issue #1](https://github.com/HelloKitty/Reinterpret.Net/issues/1) and will not be returning anytime soon.
 
 ## Performance Comparisions
 
-Performance differs between framework versions. BitConverter in older versions of .NETFramework is slower and in the .NET Core Corefx repo it's implemented in a significantly different way. All these effect the comparisions but Reinterpret.NET is usually still faster, especially the dangerous no allocation verion, with only BlockCopy being competitive due its unmanaged implementation. However for some unknown reason which doesn't appear to be IL related, could be GC or JIT, the performance of reinterpret suffers on the .NET3.5 and .NET2.0 platforms. In fact it fallback to some official .NET libraries in some areas due to the performance being better. I think it can be explored with more advanced profiling/testing tools. However right now .NET2.0/3.5 support was a bonus, not a true goal.
+The unsafe operations use to make Reinterpret.Net highly competitive in array and string conversions. These performance benchmarks have been removed due to [Issue #1](https://github.com/HelloKitty/Reinterpret.Net/issues/1). They are now approximately as fast as the .NET Encoding class or BlockCopy.
+
+Performance differs between framework versions. BitConverter in older versions of .NETFramework is slower and in the .NET Core Corefx repo it's implemented in a significantly different way. All these effect the comparisions but Reinterpret.NET is usually still faster, especially the dangerous no allocation verion, with only BlockCopy being competitive due its unmanaged implementation. However for some unknown reason which doesn't appear to be IL related, could be GC or JIT, the performance of reinterpret suffers on the .NET3.5 and .NET2.0 platforms.
 
 **.NET Core and >=.NETFramework4.0**
 
 ![Showcase](https://i.imgur.com/U97V9Vr.png "Perf")
-![Showcase](https://i.imgur.com/ktVaxic.png "Perf")
-![Showcase](https://i.imgur.com/fTXbDjt.png "Perf")
 
 **.NETFramework2.0 - .NETFramework3.5**
 
 ![Showcase](https://i.imgur.com/Cz8AWG1.png "Perf")
-![Showcase](https://i.imgur.com/OTk2X6k.png "Perf")
-![Showcase](https://i.imgur.com/vLtBBiK.png "Perf")
 
 ## Setup
 
