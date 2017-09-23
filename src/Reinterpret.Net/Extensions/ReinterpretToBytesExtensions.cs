@@ -76,37 +76,13 @@ namespace Reinterpret.Net
 
 			if(!TypeIntrospector<TConvertType>.IsPrimitive)
 				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
-			
+
 			//BlockCopy is slightly faster if we have to reallocate
 			byte[] bytes = new byte[MarshalSizeOf<TConvertType>.SizeOf * values.Length];
 
 			Buffer.BlockCopy(values, 0, bytes, 0, MarshalSizeOf<TConvertType>.SizeOf * values.Length);
 
 			return bytes;
-		}
-
-		/// <summary>
-		/// High performance but unsafe version that reinterprets the provided <see cref="values"/> array to the byte representation.
-		/// WARNING: This version will NOT leave the <see cref="values"/> array intact. It will be left in an invalid state.
-		/// </summary>
-		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
-		/// <param name="values">The values to permantely destroy and convert.</param>
-		/// <returns>The values reinterpreted into bytes.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
-		public unsafe static byte[] ReinterpretWithoutPreserving<TConvertType>(this TConvertType[] values)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
-		{
-			//Don't check if null. It's a lot faster not to
-			if(values.Length == 0) return new byte[0];
-
-			if(!TypeIntrospector<TConvertType>.IsPrimitive)
-				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
-
-			return values.ToByteArrayPerm();
 		}
 
 #if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
@@ -151,7 +127,27 @@ namespace Reinterpret.Net
 			if(value == null) throw new ArgumentNullException(nameof(value));
 			if(String.IsNullOrEmpty(value)) return new byte[0];
 
-			return value.ToCharArray().ToByteArrayPerm();
+			return Encoding.Unicode.GetBytes(value.ToCharArray());
+		}
+
+		//TODO: Can we access the underlying char array as UTF16 without copying? unions produce ASCII encoded array
+		/// <summary>
+		/// Reinterprets the provided UTF16 string into its byte representation.
+		/// </summary>
+		/// <param name="value">The string to convert.</param>
+		/// <returns>The byte represenation of the UTF16 string.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
+#endif
+		public static byte[] Reinterpret(this string value, Encoding encoding)
+		{
+			if(value == null) throw new ArgumentNullException(nameof(value));
+			if(encoding == null) throw new ArgumentNullException(nameof(encoding));
+			if(String.IsNullOrEmpty(value)) return new byte[0];
+
+			return encoding.GetBytes(value.ToCharArray());
 		}
 	}
 }

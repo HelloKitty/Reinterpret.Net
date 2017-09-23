@@ -16,10 +16,5 @@ namespace Reinterpret.Net
 #else
 		typeof(TType).GetTypeInfo().IsPrimitive;
 #endif
-
-		/// <summary>
-		/// Indicates the <see cref="UIntPtr"/> value of the array type for type <typeparamref name="TType"/>.
-		/// </summary>
-		public static UIntPtr ArrayTypeHeader { get; } = PointerHelper.GetTypeHeaderValue<TType>();
 	}
 }

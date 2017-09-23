@@ -34,17 +34,11 @@ Fastest and most generic conversions to and from bytes.</Description>
     <Reference Include="UnsafeAs">
       <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
     </Reference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net30'">
     <Reference Include="UnsafeAs">
       <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
-    </Reference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -52,17 +46,11 @@ Fastest and most generic conversions to and from bytes.</Description>
     <Reference Include="UnsafeAs">
       <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
     </Reference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
     <Reference Include="UnsafeAs">
       <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
-    </Reference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -70,36 +58,24 @@ Fastest and most generic conversions to and from bytes.</Description>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
       <Version>4.4.0</Version>
     </PackageReference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
       <Version>4.4.0</Version>
     </PackageReference>
-    <Reference Include="PointerHelper.Netframework">
-      <HintPath>..\..\lib\PointerHelper.Netframework.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
       <Version>4.4.0</Version>
     </PackageReference>
-    <Reference Include="PointerHelper.Core">
-      <HintPath>..\..\lib\PointerHelper.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
       <Version>4.4.0</Version>
     </PackageReference>
-    <Reference Include="PointerHelper.Core">
-      <HintPath>..\..\lib\PointerHelper.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

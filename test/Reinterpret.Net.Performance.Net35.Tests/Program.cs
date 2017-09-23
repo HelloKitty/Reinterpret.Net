@@ -55,7 +55,6 @@ namespace Reinterpret.Net.Performance.Tests
 			BlockCopyInt32ArrayToBytes(watch);
 			watch.Reset();
 
-			ReinterpretInt32ArrayToBytesWithDestroyArray(watch);
 			watch.Reset();
 
 			ReinterpretStringToBytes(watch);
@@ -70,7 +69,6 @@ namespace Reinterpret.Net.Performance.Tests
 			EncodingUnicodeBytesToString(watch);
 			watch.Reset();
 
-			ReinterpretBytesToStringDestroy(watch);
 			watch.Reset();
 
 			Console.ReadKey();
@@ -122,20 +120,6 @@ namespace Reinterpret.Net.Performance.Tests
 			Console.WriteLine($"Reinterpret Int32[] to bytes: {watch.Elapsed}");
 		}
 
-		private static void ReinterpretInt32ArrayToBytesWithDestroyArray(Stopwatch watch)
-		{
-			//prewarm
-			PauseGC();
-			watch.Start();
-			for(int i = 0; i < multipleArrays.Length; i++)
-				multipleArrays[i].ReinterpretWithoutPreserving();
-
-			watch.Stop();
-			ResumeGC();
-
-			Console.WriteLine($"Reinterpret (DESTROY) Int32[] to bytes: {watch.Elapsed}");
-		}
-
 		private static void ReinterpretStringToBytes(Stopwatch watch)
 		{
 			//prewarm
@@ -163,20 +147,6 @@ namespace Reinterpret.Net.Performance.Tests
 			ResumeGC();
 
 			Console.WriteLine($"Reinterpret bytes to string: {watch.Elapsed}");
-		}
-
-		private static void ReinterpretBytesToStringDestroy(Stopwatch watch)
-		{
-			//prewarm
-			PauseGC();
-			watch.Start();
-			for(int i = 0; i < TenMillion; i++)
-				MultipleByteStringArray[i].ReinterpretToStringWithoutPreserving();
-
-			watch.Stop();
-
-			Console.WriteLine($"Reinterpret (DESTROY) bytes to string: {watch.Elapsed}");
-			ResumeGC();
 		}
 
 		private static void BitConverterInt32ToBytesTest(byte[] bytes, Stopwatch watch)

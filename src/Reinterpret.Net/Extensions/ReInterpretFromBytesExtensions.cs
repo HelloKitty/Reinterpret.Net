@@ -82,29 +82,6 @@ namespace Reinterpret.Net
 			return ReinterpretPrimitiveArray<TConvertType>(bytes);
 		}
 
-		//TODO: Document
-		/// <summary>
-		///  High performance: Unsafely reinterprets the provided <see cref="bytes"/> 
-		/// to the specified generic array of value types.
-		/// </summary>
-		/// <typeparam name="TConvertType">The element type to reinterpret to.</typeparam>
-		/// <param name="bytes">The bytes chunk.</param>
-		/// <returns>The array of converted values.</returns>
-		public static unsafe TConvertType[] ReinterpretToArrayWithoutPerserving<TConvertType>(this byte[] bytes)
-			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
-		{
-			//Don't check nullness for perf. Callers shouldn't give us null arrays
-			if(bytes.Length == 0) return new TConvertType[0];
-
-			if(!TypeIntrospector<TConvertType>.IsPrimitive)
-				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
-
-			if(bytes.Length % MarshalSizeOf<TConvertType>.SizeOf != 0)
-				ThrowHelpers.ThrowMismatchedArraySizeForElementType<TConvertType>();
-
-			return bytes.ToConvertedArrayPerm<TConvertType>();
-		}
-
 		private static TConvertType[] ReinterpretPrimitiveArray<TConvertType>(byte[] bytes)
 			where TConvertType : struct, IComparable, IComparable<TConvertType>, IEquatable<TConvertType>
 		{
@@ -130,47 +107,18 @@ namespace Reinterpret.Net
 #else
 		[MethodImpl(256)]
 #endif
-		public static unsafe string ReinterpretToString(this byte[] bytes)
+		public static string ReinterpretToString(this byte[] bytes, Encoding encoding = null)
 		{
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) return "";
 
-			if(bytes.Length % 2 != 0)
-				ThrowHelpers.ThrowMismatchedArraySizeForElementType<char>();
 
-			//In older versions of .NET the reinterprting profiles slowly, for some reason, and in the case of
-			//strings it's significantly slower than the unicode encoding implementation
-#if NET20 || NET30 || NET35
-			return Encoding.Unicode.GetString(bytes);
+#if !NETSTANDARD1_1 || !NETSTANDARD2_0
+			return encoding == null ? Encoding.Unicode.GetString(bytes, 0, bytes.Length) : encoding.GetString(bytes, 0, bytes.Length);
 #else
-			//The caller may want to reuse the byte array so we check if they will allow us to destroy it
-			return new string(bytes.ToArray().ToConvertedArrayPerm<char>());//Unsafe.As<char[], string>(ref chars);
+			//TODO: Is there a faster way to do this now that we can't reinterpret?
+			return encoding == null ? Encoding.Unicode.GetString(bytes) : encoding.GetString(bytes);
 #endif
-		}
-
-		/// <summary>
-		/// High performance: unsafely Reinterprets the provided <see cref="bytes"/> 
-		/// to a C# standard UTF16 encoded (2 byte char) string.
-		/// The original bytes array will be left in an INVALID state and should be considered destroyed.
-		/// </summary>
-		/// <param name="bytes">The bytes chunk. (Invalid after calling)</param>
-		/// <returns>The converted UTF16 string.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
-		public static unsafe string ReinterpretToStringWithoutPreserving(this byte[] bytes)
-		{
-			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
-			if(bytes.Length == 0) return "";
-
-			if(bytes.Length % 2 != 0)
-				ThrowHelpers.ThrowMismatchedArraySizeForElementType<char>();
-
-			//this will destroy the original byte array
-			char[] chars = bytes.ToConvertedArrayPerm<char>();
-			return Unsafe.As<char[], string>(ref chars);
 		}
 
 		/// <summary>
