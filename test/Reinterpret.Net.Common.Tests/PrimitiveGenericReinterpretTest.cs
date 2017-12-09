@@ -80,6 +80,26 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 		[Test]
 		[TestCaseSource(nameof(ValuesToTest))]
+		public unsafe void TestCanReinterpretToTypeTypeWithExistingArrayPointer(TTypeToTest valueToTest)
+		{
+			//arrange
+			//We abuse the DLR so that we can keep this generic
+			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			byte* bytesAtackAlloc = stackalloc byte[bytes.Length];
+
+			for(int i = 0; i < bytes.Length; i++)
+				bytesAtackAlloc[i] = bytes[i];
+
+			//act
+			TTypeToTest value = ((IntPtr)bytesAtackAlloc).Reinterpret<TTypeToTest>();
+
+			//assert
+			Assert.AreEqual(valueToTest, value, $"Result from reinterpret cast was not the same.");
+			Assert.AreEqual(valueToTest.GetType(), value.GetType(), $"Result from reinterpret cast was not the same Type.");
+		}
+
+		[Test]
+		[TestCaseSource(nameof(ValuesToTest))]
 		public void TestCanReinterpretValueToBytes(TTypeToTest valueToTest)
 		{
 			//arrange

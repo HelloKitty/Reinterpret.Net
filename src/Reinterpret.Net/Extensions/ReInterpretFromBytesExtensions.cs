@@ -41,6 +41,33 @@ namespace Reinterpret.Net
 		}
 
 		/// <summary>
+		/// Reinterprets the provided <see cref="bytes"/> pointer (in the form of an <see cref="IntPtr"/>
+		/// to the specified generic value type.
+		/// </summary>
+		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
+		/// <param name="bytes">The bytes chunk.</param>
+		/// <returns>The converted value.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
+#endif
+		public static unsafe TConvertType Reinterpret<TConvertType>(this IntPtr bytes)
+			where TConvertType : struct
+		{
+			//Originally we null and length checked the bytes. This caused performance issues on .NET Core for some reason
+			//Removing them increased the speed by almost an order of magnitude.
+			//We shouldn't really handhold the user trying to reinterpet things into other things
+			//If they're using this library then they should KNOW they shouldn't mess around and anything could happen
+			//We already sacrfice safety for performance. An order of magnitude performance increase is a no brainer here.
+
+			if(!TypeIntrospector<TConvertType>.IsPrimitive)
+				ThrowHelpers.ThrowOnlyPrimitivesException<TConvertType>();
+
+			return ReinterpretPrimitive<TConvertType>((byte*)bytes);
+		}
+
+		/// <summary>
 		/// Reinterprets the provided <see cref="bytes"/> to the specified generic value type.
 		/// </summary>
 		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
@@ -151,7 +178,7 @@ namespace Reinterpret.Net
 #else
 		[MethodImpl(256)]
 #endif
-		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte* bytes, int position = 0)
+		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte* bytes)
 			where TConvertType : struct
 		{
 			return Unsafe.ReadUnaligned<TConvertType>(bytes);
