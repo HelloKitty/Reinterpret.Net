@@ -9,10 +9,4 @@
     <ProjectReference Include="..\..\src\Reinterpret.Net\Reinterpret.Net.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="PointerHelper.Core">
-      <HintPath>..\..\lib\PointerHelper.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
