@@ -138,5 +138,23 @@ namespace Reinterpret.Net
 		{
 			return Unsafe.ReadUnaligned<TConvertType>(ref bytes[position]);
 		}
+
+		/// <summary>
+		/// Reinterprets the <see cref="bytes"/> to the specified primitive type.
+		/// </summary>
+		/// <typeparam name="TConvertType">The type to convert to.</typeparam>
+		/// <param name="bytes">The bytes to convert from.</param>
+		/// <param name="position">The position to begin reading from.</param>
+		/// <returns>The converted value.</returns>
+#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+#else
+		[MethodImpl(256)]
+#endif
+		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte* bytes, int position = 0)
+			where TConvertType : struct
+		{
+			return Unsafe.ReadUnaligned<TConvertType>(bytes);
+		}
 	}
 }

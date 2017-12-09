@@ -41,6 +41,15 @@
 		ret
 	} // end of method Unsafe::ReadUnaligned
 
+	.method public hidebysig static !!T ReadUnaligned<T>(void* source) cil managed aggressiveinlining
+	{
+		.maxstack 1
+		ldarg.0        
+		unaligned. 0x1
+		ldobj !!T
+		ret
+	} // end of method Unsafe::ReadUnaligned
+
 	.method public hidebysig static void* AsPointer<T>(!!T& 'value') cil managed aggressiveinlining
 	{
 		.maxstack 1
