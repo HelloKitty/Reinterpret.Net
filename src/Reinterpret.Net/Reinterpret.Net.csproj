@@ -30,6 +30,10 @@ Fastest and most generic conversions to and from bytes.</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Reinterpret.Net.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net20'">
     <Reference Include="UnsafeAs">
       <HintPath>..\..\lib\UnsafeAs.Backport.dll</HintPath>
