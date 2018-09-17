@@ -26,6 +26,23 @@ namespace Reinterpret.Net.Performance.Tests
 			Console.ReadKey();
 			byte[] bytes = null;
 			Stopwatch watch = new Stopwatch();
+
+			string testString = "helloteststring";
+			byte[] testBytes = Encoding.Unicode.GetBytes(testString);
+
+			watch.Start();
+			for(int i = 0; i < OneHundredThousand; i++)
+				Encoding.Unicode.GetString(testBytes);
+			watch.Stop();
+			Console.WriteLine($"Encoding: {watch.ElapsedMilliseconds}");
+			
+			watch.Reset();
+			watch.Start();
+			for(int i = 0; i < OneHundredThousand; i++)
+				testBytes.ReinterpretToString();
+
+			watch.Stop();
+			Console.WriteLine($"Reinterpret: {watch.ElapsedMilliseconds}");
 			BitConverterInt32ToBytesTest(bytes, watch);
 			watch.Reset();
 
