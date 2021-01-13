@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <LangVersion>7.3</LangVersion>
+    <Version>3.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Authors>Andrew Blakely, HelloKitty</Authors>
     <Company>www.github.com/HelloKitty</Company>
@@ -18,6 +19,13 @@ Fastest and most generic conversions to and from bytes.</Description>
     <RepositoryType>git</RepositoryType>
     <PackageTags>reinterpret marshal cast reinterpretcast reinterpret_cast memcopy mem copy marshalling performance Reinterpret.Net Andrew Blakely</PackageTags>
     <NeutralLanguage />
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
