@@ -1,15 +1,16 @@
 # Reinterpret.Net
 
-Reinterpret.Net supports >=.NETFramework2.0 and .NET Core.
+Reinterpret.Net 2.x supports >=.NETFramework2.0 and .NET Core
+
+Reinterpret.Net 3.x supports Netstandard 2.0 and NETFramework4.6
 
 Reinterpret.Net is a .NET library that allows users to take advantage of an API like the [C++-style reinterpret casts](http://en.cppreference.com/w/cpp/language/reinterpret_cast) in .NET. It's built using a collection of generic extension methods meaning integration is simple.
 
 It supports casting from bytes to primitives or strings and from primitives and strings to bytes and even supports primitive arrays.
 
 ## Features
-- [x] **Netstandard1.1**
-- [ ] **Netstandard2.0**
-- [x] .NETFramework >= 2.0
+- [x] **Netstandard2.0**
+- [x] .NETFramework >= 2.0 (version 2.x only)
 - [x] Conversion from byte\[\] to primitives (Ex. Int32, Float)
 - [x] Conversion from primitives to byte\[\]
 - [x] Conversion from byte\[\] to string
