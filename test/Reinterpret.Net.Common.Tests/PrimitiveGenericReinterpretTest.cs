@@ -12,7 +12,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 {
 	[TestFixture]
 	public abstract class PrimitiveGenericReinterpretTest<TTypeToTest>
-		where TTypeToTest : struct, IComparable, IComparable<TTypeToTest>, IEquatable<TTypeToTest>
+		where TTypeToTest : unmanaged, IComparable, IComparable<TTypeToTest>, IEquatable<TTypeToTest>
 	{
 		public static IEnumerable<TTypeToTest> ValuesToTest { get; }
 
@@ -244,7 +244,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 			Assert.AreEqual(realBytes.Length, realBytes.Length, $"Calculated invalid Length for Type: {typeof(TTypeToTest).Name}");
 
 			for(int i = 0; i < realBytes.Length; i++)
-				Assert.AreEqual(realBytes[i], result[i]);
+				Assert.AreEqual(realBytes[i], result[i], $"Value at: {i} incorrect. Length: {realBytes.Length} Result Length: {result.Length}");
 		}
 
 		//Tests to see that empty arrays are handleable
