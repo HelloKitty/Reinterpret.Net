@@ -20,11 +20,7 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
 		/// <param name="bytes">The bytes chunk.</param>
 		/// <returns>The converted value.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes)
 			where TConvertType : struct
 		{
@@ -47,11 +43,7 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The type to reinterpret to.</typeparam>
 		/// <param name="bytes">The bytes chunk.</param>
 		/// <returns>The converted value.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this IntPtr bytes)
 			where TConvertType : struct
 		{
@@ -74,11 +66,7 @@ namespace Reinterpret.Net
 		/// <param name="bytes">The bytes chunk.</param>
 		/// <param name="start">The starting position to read the <typeparamref name="TConvertType"/> value from.</param>
 		/// <returns>The converted value.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		public static unsafe TConvertType Reinterpret<TConvertType>(this byte[] bytes, int start)
 			where TConvertType : struct
 		{
@@ -129,23 +117,14 @@ namespace Reinterpret.Net
 		/// </summary>
 		/// <param name="bytes">The bytes chunk.</param>
 		/// <returns>The converted UTF16 string.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		public static string ReinterpretToString(this byte[] bytes, Encoding encoding = null)
 		{
 			if(bytes == null) throw new ArgumentNullException(nameof(bytes));
 			if(bytes.Length == 0) return "";
 
-
-#if !NETSTANDARD1_1 || !NETSTANDARD2_0
-			return encoding == null ? Encoding.Unicode.GetString(bytes, 0, bytes.Length) : encoding.GetString(bytes, 0, bytes.Length);
-#else
 			//TODO: Is there a faster way to do this now that we can't reinterpret?
 			return encoding == null ? Encoding.Unicode.GetString(bytes) : encoding.GetString(bytes);
-#endif
 		}
 
 		/// <summary>
@@ -155,11 +134,7 @@ namespace Reinterpret.Net
 		/// <param name="bytes">The bytes to convert from.</param>
 		/// <param name="position">The position to begin reading from.</param>
 		/// <returns>The converted value.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte[] bytes, int position = 0)
 			where TConvertType : struct
 		{
@@ -173,11 +148,7 @@ namespace Reinterpret.Net
 		/// <param name="bytes">The bytes to convert from.</param>
 		/// <param name="position">The position to begin reading from.</param>
 		/// <returns>The converted value.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte* bytes)
 			where TConvertType : struct
 		{

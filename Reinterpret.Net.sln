@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{82223BC2-FD46-45B7-8714-A1BBB6FACC0E}"
 EndProject
@@ -11,25 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reinterpret.Net", "src\Rein
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.NetFramework.Tests", "test\Reinterpret.Net.NetFramework.Tests\Reinterpret.Net.NetFramework.Tests.csproj", "{96528F39-BC13-40E4-8B41-EFACCE26588D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.NetFramework451.Tests", "test\Reinterpret.Net.NetFramework45.Tests\Reinterpret.Net.NetFramework451.Tests.csproj", "{517D141A-4729-46E1-B4E0-0F729DE9B77E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.Common.Tests", "test\Reinterpret.Net.Common.Tests\Reinterpret.Net.Common.Tests.csproj", "{01824F98-69FB-4E14-8EB6-12E0C9C934E5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.Performance.Net451.Tests", "test\Reinterpret.Net.Performance.Net45.Tests\Reinterpret.Net.Performance.Net451.Tests.csproj", "{CB23B3DB-3230-420A-855A-2CD82B8AE2DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perf", "perf", "{14188958-36DF-48D2-91CC-8E18FBDB94AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.Performance.Net40.Tests", "test\Reinterpret.Net.Performance.Net40.Tests\Reinterpret.Net.Performance.Net40.Tests.csproj", "{4E5818E7-7F70-4B9C-8FAE-6793383CD860}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.Netframework40.Tests", "test\Reinterpret.Net.Netframework40.Tests\Reinterpret.Net.Netframework40.Tests.csproj", "{9EE339C7-677D-4E26-B0C7-4E8A9351BBA0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.Performance.Tests", "test\Reinterpret.Net.Performance.Tests\Reinterpret.Net.Performance.Tests.csproj", "{8528C616-6FD1-401B-8F8E-0845FDA969F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.Performance.Net20.Tests", "test\Reinterpret.Net.Performance.Net20.Tests\Reinterpret.Net.Performance.Net20.Tests.csproj", "{51F51D9C-CA22-45A3-A917-303C32AD115F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reinterpret.Net.Performance.Netcore.Tests", "test\Reinterpret.Net.Performance.Netcore.Tests\Reinterpret.Net.Performance.Netcore.Tests.csproj", "{8359DE7E-2E79-4EDE-BE00-283BC5621A77}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.Performance.Net35.Tests", "test\Reinterpret.Net.Performance.Net35.Tests\Reinterpret.Net.Performance.Net35.Tests.csproj", "{796E4E7C-003C-4778-BD62-54D46B0E05CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reinterpret.Net.NetFramework46.Nuget.Tests", "test\Reinterpret.Net.NetFramework46.Nuget.Tests\Reinterpret.Net.NetFramework46.Nuget.Tests.csproj", "{4786F783-7EB2-4EC7-8772-8AA5AEA02B16}"
 EndProject
@@ -47,42 +35,18 @@ Global
 		{96528F39-BC13-40E4-8B41-EFACCE26588D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96528F39-BC13-40E4-8B41-EFACCE26588D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96528F39-BC13-40E4-8B41-EFACCE26588D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{517D141A-4729-46E1-B4E0-0F729DE9B77E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{517D141A-4729-46E1-B4E0-0F729DE9B77E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{517D141A-4729-46E1-B4E0-0F729DE9B77E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{517D141A-4729-46E1-B4E0-0F729DE9B77E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01824F98-69FB-4E14-8EB6-12E0C9C934E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{01824F98-69FB-4E14-8EB6-12E0C9C934E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01824F98-69FB-4E14-8EB6-12E0C9C934E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01824F98-69FB-4E14-8EB6-12E0C9C934E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CB23B3DB-3230-420A-855A-2CD82B8AE2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CB23B3DB-3230-420A-855A-2CD82B8AE2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CB23B3DB-3230-420A-855A-2CD82B8AE2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CB23B3DB-3230-420A-855A-2CD82B8AE2DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E5818E7-7F70-4B9C-8FAE-6793383CD860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E5818E7-7F70-4B9C-8FAE-6793383CD860}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E5818E7-7F70-4B9C-8FAE-6793383CD860}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E5818E7-7F70-4B9C-8FAE-6793383CD860}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9EE339C7-677D-4E26-B0C7-4E8A9351BBA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9EE339C7-677D-4E26-B0C7-4E8A9351BBA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9EE339C7-677D-4E26-B0C7-4E8A9351BBA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9EE339C7-677D-4E26-B0C7-4E8A9351BBA0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8528C616-6FD1-401B-8F8E-0845FDA969F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8528C616-6FD1-401B-8F8E-0845FDA969F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8528C616-6FD1-401B-8F8E-0845FDA969F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8528C616-6FD1-401B-8F8E-0845FDA969F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{51F51D9C-CA22-45A3-A917-303C32AD115F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51F51D9C-CA22-45A3-A917-303C32AD115F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{51F51D9C-CA22-45A3-A917-303C32AD115F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51F51D9C-CA22-45A3-A917-303C32AD115F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8359DE7E-2E79-4EDE-BE00-283BC5621A77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8359DE7E-2E79-4EDE-BE00-283BC5621A77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8359DE7E-2E79-4EDE-BE00-283BC5621A77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8359DE7E-2E79-4EDE-BE00-283BC5621A77}.Release|Any CPU.Build.0 = Release|Any CPU
-		{796E4E7C-003C-4778-BD62-54D46B0E05CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{796E4E7C-003C-4778-BD62-54D46B0E05CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{796E4E7C-003C-4778-BD62-54D46B0E05CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{796E4E7C-003C-4778-BD62-54D46B0E05CD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4786F783-7EB2-4EC7-8772-8AA5AEA02B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4786F783-7EB2-4EC7-8772-8AA5AEA02B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4786F783-7EB2-4EC7-8772-8AA5AEA02B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -94,16 +58,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{220EF1DB-3B15-403D-A531-8140D1E40D0F} = {82223BC2-FD46-45B7-8714-A1BBB6FACC0E}
 		{96528F39-BC13-40E4-8B41-EFACCE26588D} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
-		{517D141A-4729-46E1-B4E0-0F729DE9B77E} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
 		{01824F98-69FB-4E14-8EB6-12E0C9C934E5} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
-		{CB23B3DB-3230-420A-855A-2CD82B8AE2DF} = {14188958-36DF-48D2-91CC-8E18FBDB94AF}
 		{14188958-36DF-48D2-91CC-8E18FBDB94AF} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
-		{4E5818E7-7F70-4B9C-8FAE-6793383CD860} = {14188958-36DF-48D2-91CC-8E18FBDB94AF}
-		{9EE339C7-677D-4E26-B0C7-4E8A9351BBA0} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
 		{8528C616-6FD1-401B-8F8E-0845FDA969F2} = {14188958-36DF-48D2-91CC-8E18FBDB94AF}
-		{51F51D9C-CA22-45A3-A917-303C32AD115F} = {14188958-36DF-48D2-91CC-8E18FBDB94AF}
 		{8359DE7E-2E79-4EDE-BE00-283BC5621A77} = {14188958-36DF-48D2-91CC-8E18FBDB94AF}
-		{796E4E7C-003C-4778-BD62-54D46B0E05CD} = {14188958-36DF-48D2-91CC-8E18FBDB94AF}
 		{4786F783-7EB2-4EC7-8772-8AA5AEA02B16} = {FCFAE99C-C28A-44B7-A7BE-F9D5481C35B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

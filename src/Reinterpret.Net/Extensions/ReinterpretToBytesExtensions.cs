@@ -20,11 +20,7 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The type of the value.</typeparam>
 		/// <param name="value">The value to convert.</param>
 		/// <returns>The byte array representation of the value.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value)
 			where TConvertType : struct
 		{
@@ -42,11 +38,7 @@ namespace Reinterpret.Net
 		/// <param name="bytes">The buffer to write/reinterpret into.</param>
 		/// <param name="start">The position in the buffer to start writing into.</param>
 		/// <returns>The passed in byte array for fluent chaining.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		public static byte[] Reinterpret<TConvertType>(this TConvertType value, byte[] bytes, int start)
 			where TConvertType : struct
 		{
@@ -63,12 +55,8 @@ namespace Reinterpret.Net
 		/// <typeparam name="TConvertType">The element type of the array.</typeparam>
 		/// <param name="values">The array to reinterpret.</param>
 		/// <returns>The byte represenation of the values.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
-		public unsafe static byte[] Reinterpret<TConvertType>(this TConvertType[] values)
+		public static unsafe byte[] Reinterpret<TConvertType>(this TConvertType[] values)
 			where TConvertType : struct
 		{
 			//Don't check if null. It's a lot faster not to
@@ -85,11 +73,7 @@ namespace Reinterpret.Net
 			return bytes;
 		}
 
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value) 
 			where TConvertType : struct
 		{
@@ -98,11 +82,7 @@ namespace Reinterpret.Net
 			return ReinterpretFromPrimitive(value, bytes, 0);
 		}
 
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		private static byte[] ReinterpretFromPrimitive<TConvertType>(TConvertType value, byte[] bytes, int start)
 			where TConvertType : struct
 		{
@@ -117,11 +97,7 @@ namespace Reinterpret.Net
 		/// </summary>
 		/// <param name="value">The string to convert.</param>
 		/// <returns>The byte represenation of the UTF16 string.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		public static byte[] Reinterpret(this string value)
 		{
 			if(value == null) throw new ArgumentNullException(nameof(value));
@@ -136,11 +112,7 @@ namespace Reinterpret.Net
 		/// </summary>
 		/// <param name="value">The string to convert.</param>
 		/// <returns>The byte represenation of the UTF16 string.</returns>
-#if NET451 || NET46 || NETSTANDARD1_1 || NETSTANDARD2_0
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-#else
-		[MethodImpl(256)]
-#endif
 		public static byte[] Reinterpret(this string value, Encoding encoding)
 		{
 			if(value == null) throw new ArgumentNullException(nameof(value));
