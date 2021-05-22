@@ -23,22 +23,16 @@ namespace Reinterpret.Net
 			if (MarshalSizeOf<TFrom>.SizeOf >= MarshalSizeOf<TTo>.SizeOf)
 				return Unsafe.As<TFrom, TTo>(ref value);
 
-			//TTo is larger bit size so we must carefully reinterpret to avoid out of bounds memory references.
-			byte[] buffer = ArrayPool<byte>.Shared.Rent(MarshalSizeOf<TTo>.SizeOf);
-			try
+			//Thanks Fabian =3
+			ulong widenedValue = Unsafe.SizeOf<TFrom>() switch
 			{
-				//Since the buffer is non-zero by default and Reinterpret TFrom value to bytes can leave higher index
-				//bytes non-zero it could cause the Reinterpret to TTo to fail so we can just directly set
-				//the entire buffer to the default value of TTo
-				Unsafe.As<byte, TTo>(ref buffer[0]) = default;
+				1 => Unsafe.As<TFrom, byte>(ref value),
+				2 => Unsafe.As<TFrom, ushort>(ref value),
+				4 => Unsafe.As<TFrom, uint>(ref value),
+				_ => Unsafe.As<TFrom, ulong>(ref value)
+			};
 
-				value.Reinterpret(buffer);
-				return buffer.Reinterpret<TTo>();
-			}
-			finally
-			{
-				ArrayPool<byte>.Shared.Return(buffer);
-			}
+			return Unsafe.As<ulong, TTo>(ref widenedValue);
 		}
 	}
 }
