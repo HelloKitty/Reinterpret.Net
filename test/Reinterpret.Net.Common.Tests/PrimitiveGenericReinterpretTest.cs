@@ -265,6 +265,38 @@ namespace Reinterpret.Net.NetFramework.Tests
 				Assert.AreEqual(realBytes[i], result[i]);
 		}
 
+		[Test]
+		[TestCaseSource(nameof(ValuesToTest))]
+		public void TestCanReinterpretPrimitive(TTypeToTest valueToTest)
+		{
+			AssertCanReinterpretToPrimitive<int>(valueToTest);
+			AssertCanReinterpretToPrimitive<uint>(valueToTest);
+			AssertCanReinterpretToPrimitive<long>(valueToTest);
+			AssertCanReinterpretToPrimitive<ulong>(valueToTest);
+			AssertCanReinterpretToPrimitive<float>(valueToTest);
+			AssertCanReinterpretToPrimitive<char>(valueToTest);
+			AssertCanReinterpretToPrimitive<bool>(valueToTest);
+			AssertCanReinterpretToPrimitive<byte>(valueToTest);
+		}
+
+		private static void AssertCanReinterpretToPrimitive<T>(TTypeToTest valueToTest) 
+			where T : unmanaged
+		{
+			var byteResult = valueToTest.Reinterpret<TTypeToTest, T>().Reinterpret();
+			var original = valueToTest.Reinterpret();
+
+			//Must check byteresult length too, can go down in bit size.
+			for(int i = 0; i < original.Length && i < byteResult.Length; i++)
+				Assert.AreEqual(original[i], byteResult[i], $"Failed to convert at Index: {i} From: {valueToTest.GetType().Name} to Type: {typeof(T).Name}. Original Value: {valueToTest}");
+			
+			//Ensure upper bytes are also 0 if it's bigger
+			if (byteResult.Length > original.Length)
+			{
+				for(int i = original.Length; i < byteResult.Length; i++)
+					Assert.AreEqual(0, byteResult[i], $"Expected zero byte, failed to convert at Index: {i} From: {valueToTest.GetType().Name} to Type: {typeof(T).Name}. Original Value: {valueToTest}.");
+			}
+		}
+
 		private static UInt64 GetMaxValue()
 		{
 			Type convertType = typeof(TTypeToTest);
