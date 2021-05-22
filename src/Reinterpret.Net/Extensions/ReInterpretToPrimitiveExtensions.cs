@@ -20,6 +20,9 @@ namespace Reinterpret.Net
 			where TFrom : unmanaged
 			where TTo : unmanaged
 		{
+			if (typeof(TTo) == typeof(decimal) || typeof(TFrom) == typeof(decimal))
+				throw new InvalidOperationException($"Type: {nameof(Decimal)} is not supported for primitive reinterpret.");
+
 			if (MarshalSizeOf<TFrom>.SizeOf >= MarshalSizeOf<TTo>.SizeOf)
 				return Unsafe.As<TFrom, TTo>(ref value);
 
