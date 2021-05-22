@@ -15,5 +15,15 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			
 		}
+
+		[Test]
+		[TestCaseSource(nameof(ValuesToTest))]
+		public static void TestEncounterExceptionReinterpretingIntoTooSmallBuffer(int value)
+		{
+			byte[] buffer = new byte[2];
+			byte[] buffer2 = new byte[4];
+			Assert.Throws<InvalidOperationException>(() => value.Reinterpret(buffer));
+			Assert.Throws<InvalidOperationException>(() => value.Reinterpret(buffer2, 1));
+		}
 	}
 }

@@ -98,6 +98,9 @@ namespace Reinterpret.Net
 		private static void ReinterpretFromPrimitive<TConvertType>(TConvertType value, Span<byte> bytes, int start = 0)
 			where TConvertType : unmanaged
 		{
+			if (bytes.Length - start < MarshalSizeOf<TConvertType>.SizeOf)
+				ThrowHelpers.ThrowBufferTooSmall<TConvertType>(bytes.Length - start);
+
 			Unsafe.As<byte, TConvertType>(ref bytes[start]) = value;
 		}
 

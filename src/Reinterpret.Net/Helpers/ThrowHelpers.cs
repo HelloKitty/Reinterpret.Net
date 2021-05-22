@@ -20,5 +20,13 @@ namespace Reinterpret.Net
 		{
 			throw new InvalidOperationException($"Cannot reinterpret to Type: {typeof(TConvertType[]).Name} because the array size mismatches from a multiple of the element size.");
 		}
+
+		//Seperate method to avoid inlining exception
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		internal static void ThrowBufferTooSmall<TConvertType>(int size) 
+			where TConvertType : struct
+		{
+			throw new InvalidOperationException($"Cannot reinterpret Type: {typeof(TConvertType).Name} to buffer of Size: {size}. Required minimum Size: {MarshalSizeOf<TConvertType>.SizeOf}");
+		}
 	}
 }
