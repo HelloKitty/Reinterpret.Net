@@ -274,6 +274,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 			AssertCanReinterpretToPrimitive<long>(valueToTest);
 			AssertCanReinterpretToPrimitive<ulong>(valueToTest);
 			AssertCanReinterpretToPrimitive<float>(valueToTest);
+			AssertCanReinterpretToPrimitive<double>(valueToTest);
 			AssertCanReinterpretToPrimitive<char>(valueToTest);
 			AssertCanReinterpretToPrimitive<bool>(valueToTest);
 			AssertCanReinterpretToPrimitive<byte>(valueToTest);
