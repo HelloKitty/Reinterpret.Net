@@ -20,11 +20,9 @@ namespace Reinterpret.Net
 			where TFrom : unmanaged
 			where TTo : unmanaged
 		{
-			if (typeof(TTo) == typeof(decimal) || typeof(TFrom) == typeof(decimal))
-				throw new InvalidOperationException($"Type: {nameof(Decimal)} is not supported for primitive reinterpret.");
-
-			if (MarshalSizeOf<TFrom>.SizeOf >= MarshalSizeOf<TTo>.SizeOf)
-				return Unsafe.As<TFrom, TTo>(ref value);
+			//We cannot support currently larger than 8-byte primitives.
+			if (MarshalSizeOf<TFrom>.SizeOf > ReinterpretConstants.MAX_REINTERPRET_PRIMITIVE_BYTE_SIZE || MarshalSizeOf<TTo>.SizeOf > ReinterpretConstants.MAX_REINTERPRET_PRIMITIVE_BYTE_SIZE)
+				throw new InvalidOperationException($"{typeof(TFrom).Name} to {typeof(TTo).Name} is not supported for primitive reinterpret. Byte size is too large.");
 
 			//Thanks Fabian =3
 			ulong widenedValue = Unsafe.SizeOf<TFrom>() switch
