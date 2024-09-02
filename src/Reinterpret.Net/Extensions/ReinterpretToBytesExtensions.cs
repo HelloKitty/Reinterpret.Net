@@ -85,7 +85,7 @@ namespace Reinterpret.Net
 			fixed (TConvertType* ptr = values)
 			{
 				byte* destPtr = (byte*) ptr;
-				Unsafe.CopyBlock(ref bytes[start], ref destPtr[0], byteSize);
+				Unsafe.CopyBlockUnaligned(ref bytes[start], ref destPtr[0], byteSize);
 			}
 		}
 
