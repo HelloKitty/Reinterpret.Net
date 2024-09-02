@@ -189,7 +189,8 @@ namespace Reinterpret.Net
 			where TConvertType : unmanaged
 		{
 			// AI suggested bounds checking
-			if (position < 0 
+			if (position < 0
+			    || bytes.Length == 0
 			    || (position + MarshalSizeOf<TConvertType>.SizeOf) > bytes.Length)
 				ThrowOutofBoundsException();
 
