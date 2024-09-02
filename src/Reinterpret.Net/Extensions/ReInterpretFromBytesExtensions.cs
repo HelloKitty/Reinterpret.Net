@@ -98,13 +98,20 @@ namespace Reinterpret.Net
 			if (typeof(TConvertType) == typeof(byte))
 				return bytes.ToArray() as TConvertType[];
 
+			int elementSize = MarshalSizeOf<TConvertType>.SizeOf;
+			if (elementSize == 0)
+				throw new InvalidOperationException("Invalid type size");
+
+			if (bytes.Length % elementSize != 0)
+				throw new ArgumentException("Byte length is not a multiple of the element size");
+
 			//BlockCopy is slightly faster if we have to reallocate
-			TConvertType[] convertedValues = new TConvertType[unchecked(bytes.Length / MarshalSizeOf<TConvertType>.SizeOf)];
+			TConvertType[] convertedValues = new TConvertType[unchecked(bytes.Length / elementSize)];
 
 			fixed (TConvertType* dest = convertedValues)
 			{
 				byte* destPtr = (byte*) dest;
-				Unsafe.CopyBlock(ref destPtr[0], ref bytes[0], (uint)bytes.Length);
+				Unsafe.CopyBlockUnaligned(ref destPtr[0], ref bytes[0], (uint)bytes.Length);
 			}
 
 			return convertedValues;
