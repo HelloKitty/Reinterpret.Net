@@ -80,18 +80,13 @@ namespace Reinterpret.Net
 			uint byteSize = (uint)(MarshalSizeOf<TConvertType>.SizeOf * values.Length);
 
 			if (start < 0 || (start + byteSize) > bytes.Length)
-				ThrowBufferTooSmallException();
+				ThrowHelpers.ThrowBufferTooSmall<TConvertType>(bytes.Length - start);
 
 			fixed (TConvertType* ptr = values)
 			{
 				byte* destPtr = (byte*) ptr;
 				Unsafe.CopyBlockUnaligned(ref bytes[start], ref destPtr[0], byteSize);
 			}
-		}
-
-		private static void ThrowBufferTooSmallException() 
-		{
-			throw new ArgumentOutOfRangeException($"Buffer is too small to contain the reinterpreted data.");
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
