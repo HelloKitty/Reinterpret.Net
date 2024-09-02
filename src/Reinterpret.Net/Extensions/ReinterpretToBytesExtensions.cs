@@ -76,13 +76,22 @@ namespace Reinterpret.Net
 		public static unsafe void Reinterpret<TConvertType>(this TConvertType[] values, Span<byte> bytes, int start = 0)
 			where TConvertType : unmanaged
 		{
+			// AI suggested a checked section, unlikely to overflow though so I refused
 			uint byteSize = (uint)(MarshalSizeOf<TConvertType>.SizeOf * values.Length);
+
+			if (start < 0 || (start + byteSize) > bytes.Length)
+				ThrowBufferTooSmallException();
 
 			fixed (TConvertType* ptr = values)
 			{
 				byte* destPtr = (byte*) ptr;
 				Unsafe.CopyBlock(ref bytes[start], ref destPtr[0], byteSize);
 			}
+		}
+
+		private static void ThrowBufferTooSmallException() 
+		{
+			throw new ArgumentOutOfRangeException($"Buffer is too small to contain the reinterpreted data.");
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
