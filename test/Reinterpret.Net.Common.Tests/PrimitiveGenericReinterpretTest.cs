@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			//arrange
 			//We abuse the DLR so that we can keep this generic
-			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			byte[] bytes = GetTestBytesDynamically(valueToTest);
 			byte[] buffer = new byte[255];
 
 			for(int i = 0; i < bytes.Length; i++)
@@ -55,11 +56,23 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			//arrange
 			//We abuse the DLR so that we can keep this generic
-			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			byte[] bytes = GetTestBytesDynamically(valueToTest);
 			bytes = bytes.Skip(1).ToArray();
 
 			//assert
-			Assert.DoesNotThrow(() => bytes.Reinterpret<TTypeToTest>());
+			Assert.Throws<ArgumentOutOfRangeException>(() => bytes.Reinterpret<TTypeToTest>(), $"Failed for Type: {valueToTest.GetType().Name}");
+		}
+
+		private static byte[] GetTestBytesDynamically(TTypeToTest valueToTest)
+		{
+			// GetBytes doesn't have a byte overload so this messed up tests.
+			if (typeof(TTypeToTest) == typeof(byte))
+				return new[] {(byte)(dynamic)valueToTest};
+			else if (typeof(TTypeToTest) == typeof(sbyte))
+				return new[] { Unsafe.As<TTypeToTest, byte>(ref valueToTest) };
+
+			//We abuse the DLR so that we can keep this generic
+			return BitConverter.GetBytes((dynamic)valueToTest);
 		}
 
 		[Test]
@@ -68,7 +81,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			//arrange
 			//We abuse the DLR so that we can keep this generic
-			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			byte[] bytes = GetTestBytesDynamically(valueToTest); ;
 
 			//act
 			TTypeToTest value = bytes.Reinterpret<TTypeToTest>();
@@ -84,7 +97,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			//arrange
 			//We abuse the DLR so that we can keep this generic
-			byte[] bytes = BitConverter.GetBytes((dynamic)valueToTest);
+			byte[] bytes = GetTestBytesDynamically(valueToTest); ;
 			byte* bytesAtackAlloc = stackalloc byte[bytes.Length];
 
 			for(int i = 0; i < bytes.Length; i++)
@@ -115,7 +128,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 					bytes = new byte[] { (byte)(sbyte)(object)valueToTest };
 				}
 			else
-				bytes = BitConverter.GetBytes((dynamic)valueToTest);
+				bytes = GetTestBytesDynamically(valueToTest); ;
 			
 
 			//act
@@ -146,7 +159,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 					bytes = new byte[] { (byte)(sbyte)(object)valueToTest };
 				}
 			else
-				bytes = BitConverter.GetBytes((dynamic)valueToTest);
+				bytes = GetTestBytesDynamically(valueToTest); ;
 
 
 			//act
@@ -165,7 +178,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			//arrange
 			byte[] realBytes = ValuesToTest
-				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[]{(byte)(dynamic)v} : (byte[])BitConverter.GetBytes((dynamic)v))
+				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[]{(byte)(dynamic)v} : (byte[])GetTestBytesDynamically(v))
 				.ToArray();
 
 			//act
@@ -190,7 +203,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 
 			//arrange
 			byte[] realBytes = ValuesToTest
-				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[] { (byte)(dynamic)v } : (byte[])BitConverter.GetBytes((dynamic)v))
+				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[] { (byte)(dynamic)v } : (byte[])GetTestBytesDynamically(v))
 				.ToArray();
 
 			IList<byte> byteList = realBytes.ToList();
@@ -208,7 +221,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			//arrange
 			byte[] realBytes = ValuesToTest
-				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[] { (byte)(dynamic)v } : (byte[])BitConverter.GetBytes((dynamic)v))
+				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[] { (byte)(dynamic)v } : (byte[])GetTestBytesDynamically(v))
 				.ToArray();
 
 			//act
@@ -233,7 +246,7 @@ namespace Reinterpret.Net.NetFramework.Tests
 		{
 			//arrange
 			byte[] realBytes = ValuesToTest
-				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[] { (byte)(dynamic)v } : (byte[])BitConverter.GetBytes((dynamic)v))
+				.SelectMany(v => typeof(TTypeToTest) == typeof(byte) || typeof(TTypeToTest) == typeof(sbyte) ? new byte[] { (byte)(dynamic)v } : (byte[])GetTestBytesDynamically(v))
 				.ToArray();
 
 			//act
