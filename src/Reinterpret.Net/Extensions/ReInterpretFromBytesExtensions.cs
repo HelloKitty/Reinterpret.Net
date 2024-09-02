@@ -211,7 +211,15 @@ namespace Reinterpret.Net
 		private static unsafe TConvertType ReinterpretPrimitive<TConvertType>(byte* bytes)
 			where TConvertType : unmanaged
 		{
+			if (bytes == null)
+				ThrowInvalidPointerException();
+
 			return Unsafe.ReadUnaligned<TConvertType>(bytes);
+		}
+
+		private static void ThrowInvalidPointerException()
+		{
+			throw new ArgumentNullException($"Pointer cannot be null.");
 		}
 	}
 }
