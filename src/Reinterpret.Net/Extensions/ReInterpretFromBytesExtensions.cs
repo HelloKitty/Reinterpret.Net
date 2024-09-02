@@ -188,7 +188,17 @@ namespace Reinterpret.Net
 		private static TConvertType ReinterpretPrimitive<TConvertType>(Span<byte> bytes, int position = 0)
 			where TConvertType : unmanaged
 		{
+			// AI suggested bounds checking
+			if (position < 0 
+			    || (position + MarshalSizeOf<TConvertType>.SizeOf) > bytes.Length)
+				ThrowOutofBoundsException();
+
 			return Unsafe.ReadUnaligned<TConvertType>(ref bytes[position]);
+		}
+
+		private static void ThrowOutofBoundsException() 
+		{
+			throw new ArgumentOutOfRangeException($"Position is out of bounds or does not leave enough space for the type.");
 		}
 
 		/// <summary>
